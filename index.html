@@ -6,42 +6,56 @@
     <link rel="stylesheet" href="assets/ol/ol.css" type="text/css">
     <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
     <script src="assets/ol/polyfill.min.js"></script>
-    <script src="assets/ol/ol-debug.js"></script>
+    <script src="https://openlayers.org/en/v4.6.5/build/ol-debug.js"></script>
     <!-- A-Frame -->
     <script src="assets/aframe/aframe.min.js"></script>
     <!-- aframe openlayers component -->
-    <script src="assets/aframe-openlayers-component/aframe-openlayers-component.min.js"></script> 
+    <script src="assets/aframe-openlayers-component/build.js"></script> 
         <!-- aframe GUI component -->
     <script src="assets/aframe-gui/aframe-gui.min.js"></script> 
     <!-- your OpenLayers map -->
      <script>
-        var source1 = new ol.source.OSM();
-        var layer1 = new ol.layer.Tile({
-          source: source1
-        });
-        var source2 = new ol.source.Vector({
-            url: 'https://openlayers.org/en/v4.6.5/examples/data/geojson/countries.geojson',
-            format: new ol.format.GeoJSON()
-        });
-        var layer2 = new ol.layer.Vector({
-            source: source2
-        });
-        var map = new ol.Map({
-            layers: [
-                layer1,
-                layer2
-            ],
-            target: 'map',
-            controls: ol.control.defaults({
-                attributionOptions: {
-                    collapsible: false
-                }
-            }),
-            view: new ol.View({
-                center: [0, 0],
-                zoom: 0.7
-            })
-        });
+		//// Create one openlayers map
+		var source1 = new ol.source.OSM();
+		var layer1 = new ol.layer.Tile({
+		  source: source1
+		});
+		var source2 = new ol.source.Vector({
+		    url: 'https://openlayers.org/en/v4.6.5/examples/data/geojson/countries.geojson',
+		    format: new ol.format.GeoJSON()
+		});
+		var layer2 = new ol.layer.Vector({
+		    source: source2
+		});
+		var map = new ol.Map({
+		    layers: [
+		        layer1,
+		        layer2
+		    ],
+		    target: 'map',
+		    controls: ol.control.defaults({
+		        attributionOptions: {
+		            collapsible: false
+		        }
+		    }),
+		    view: new ol.View({
+		        center: [0, 0],
+		        zoom: 0.7
+		    })
+		});
+		//// Create one interaction
+		var select = new ol.interaction.Select({
+		    condition: ol.events.condition.click //Click interaction
+		  });
+		map.addInteraction(select);
+		select.on('select', function(e) {
+			if(e.selected.length>0){
+				//console.log(e.selected[0].getGeometry().getExtent());
+			}
+			else{
+				
+			}
+		  });
 	 </script>
   </head>
   <body>
@@ -56,6 +70,8 @@
 		   width="4" 
 		   color="#c4c4c4"
 		   ol="  map: map;
+		   		 aframeEvent: click;
+			     OlEvent: click;
 		         pixToVRRatio:150;"
 		></a-plane>
      
@@ -94,17 +110,22 @@
 		</a-gui-flex-container>
      	<!-- In case we have VR controls -->
 		<a-entity laser-controls="hand: right"></a-entity>
+
+ 		<a-camera id="camera" position="0 1.6 0"  look-controls wasd-controls-enabled="true" >
+		  <a-text id="infoText" color="grey" value="" position="0 -0.2 -1" scale="0.4 0.4 0.4"></a-text>
+		  <a-cursor fuse="false" interval="1000"></a-cursor>
+		</a-camera> 
 		
-		<!-- Camera + cursor. -->
-		<a-entity id="cameraRig" position="0 0 0">
+ 		<!-- Camera + cursor. -->
+		<!--<a-entity id="cameraRig" position="0 0 0">
 			<a-camera look-controls wasd-controls position="0 1.6 0">
 				<a-gui-cursor id="cursor"
 						  raycaster="objects: [gui-interactable]"
 						  fuse="false"
 				>
-				</a-gui-cursor> <!-- /cursor -->
-			</a-camera> <!-- /camera -->
-		</a-entity>
+				</a-gui-cursor> /cursor
+			</a-camera> /camera
+		</a-entity> -->
     </a-scene>
   </body>
 </html>
