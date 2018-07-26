@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <title>Prize Papers WebVR data exploration tool</title>
+    <meta name="description" content="Prize Papers WebVR data exploration tool"></meta>
+    <!-- Openlayers -->
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.6.5/css/ol.css" type="text/css">
+    <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://openlayers.org/en/v4.6.5/build/ol-debug.js"></script>
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <!-- aframe openlayers component -->
+    <script src="https://unpkg.com/aframe-openlayers-component/dist/aframe-openlayers-component.min.js"></script> 
+        <!-- aframe GUI component -->
+    <script src="https://rawgit.com/rdub80/aframe-gui/master/dist/aframe-gui.min.js"></script> 
+    <!-- your OpenLayers map -->
+     <script>
+        var source1 = new ol.source.OSM();
+        var layer1 = new ol.layer.Tile({
+          source: source1
+        });
+        var source2 = new ol.source.Vector({
+            url: 'https://openlayers.org/en/v4.6.5/examples/data/geojson/countries.geojson',
+            format: new ol.format.GeoJSON()
+        });
+        var layer2 = new ol.layer.Vector({
+            source: source2
+        });
+        var map = new ol.Map({
+            layers: [
+                layer1,
+                layer2
+            ],
+            target: 'map',
+            controls: ol.control.defaults({
+                attributionOptions: {
+                    collapsible: false
+                }
+            }),
+            view: new ol.View({
+                center: [0, 0],
+                zoom: 0.7
+            })
+        });
+	 </script>
+  </head>
+  <body>
+    <a-scene>
+		<a-assets>
+		    <div id="map"></div>
+		</a-assets>
+      
+		 <a-plane 
+		   position="0 2 -2" 
+		   height="2" 
+		   width="4" 
+		   color="#c4c4c4"
+		   ol="  map: map;
+		         pixToVRRatio:150;"
+		></a-plane>
+     
+		<a-gui-flex-container 
+			flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1" opacity="0.7" width="3.5" height="4.5"
+			position="2 2.5 -4" rotation="0 0 0"
+		>
+		... gui items here...
+		</a-gui-flex-container>
+     
+		<!-- Camera + cursor. -->
+		<a-entity id="cameraRig" position="0 1.6 0">
+			<a-camera look-controls wasd-controls position="0 0 0">
+				<a-gui-cursor id="cursor"
+						  raycaster="objects: [gui-interactable]"
+						  fuse="false"
+				>
+				</a-gui-cursor> <!-- /cursor -->
+			</a-camera> <!-- /camera -->
+		</a-entity>
+    </a-scene>
+  </body>
+</html>
