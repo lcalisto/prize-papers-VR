@@ -94,9 +94,10 @@
 		</a-gui-flex-container>
      	<!-- In case we have VR controls -->
 		<a-entity laser-controls="hand: right"></a-entity>
+		
 		<!-- Camera + cursor. -->
-		<a-entity id="cameraRig" position="0 1.6 0">
-			<a-camera look-controls wasd-controls position="0 0 0">
+		<a-entity id="cameraRig" position="0 0 0">
+			<a-camera look-controls wasd-controls position="0 1.6 0">
 				<a-gui-cursor id="cursor"
 						  raycaster="objects: [gui-interactable]"
 						  fuse="false"
