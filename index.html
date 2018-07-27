@@ -15,6 +15,8 @@
     <script src="assets/aframe-gui/aframe-gui.min.js"></script> 
     <!-- your OpenLayers map -->
      <script>
+     
+
 		//// Create one openlayers map
 		var source1 = new ol.source.OSM();
 		var layer1 = new ol.layer.Tile({
@@ -27,10 +29,18 @@
 		var layer2 = new ol.layer.Vector({
 		    source: source2
 		});
+			var source3 = new ol.source.Vector({
+			    url: 'https://sigap.calisto.pt/prize-papers-api/ships?or_country=portugal',
+			    format: new ol.format.GeoJSON()
+			});
+			var layer3 = new ol.layer.Vector({
+			    source: source3
+			}); 
 		var map = new ol.Map({
 		    layers: [
 		        layer1,
-		        layer2
+		        layer2,
+		        layer3
 		    ],
 		    target: 'map',
 		    controls: ol.control.defaults({
@@ -56,58 +66,210 @@
 				
 			}
 		  });
+/* 		  // Replace ./data.json with your JSON feed
+	     fetch('https://sigap.calisto.pt/prize-papers-api/ships?or_country=portugal').then(response => {
+	       return response.json();
+	     }).then(data => {
+	       // Work with JSON data here
+	       console.log(data.geodata);
+ 			var source3 = new ol.source.Vector({
+			    url: 'http://localhost:5000/ships?country=portugal',
+			    format: new ol.format.GeoJSON()
+			});
+			var layer3 = new ol.layer.Vector({
+			    source: source3
+			}); 
+			map.addLayer(layer3);
+	     }).catch(err => {
+	       // Do something for an error here
+	     }); */
 	 </script>
   </head>
   <body>
     <a-scene>
 		<a-assets>
 		    <div id="map"></div>
+		    <img id="gradient" src="assets/gradient.png">
+			<img id="ground" src="assets/ground.png">
+			<a-asset-item id="iconfont" src="assets/fonts/ionicons.ttf"></a-asset-item>
+			<a-asset-item id="fontfamily" src="https://fonts.googleapis.com/css?family=Fira+Sans"></a-asset-item>
+			<a-asset-item id="iconfont" src="assets/fonts/ionicons.ttf"></a-asset-item>
 		</a-assets>
+      	
       
 		 <a-plane 
-		   position="0 2 -2" 
+		   position="0 2 -2.5" 
 		   height="2" 
 		   width="4" 
 		   color="#c4c4c4"
+		   opacity="100"
 		   ol="  map: map;
 		   		 aframeEvent: click;
 			     OlEvent: click;
 		         pixToVRRatio:150;"
 		></a-plane>
-     
+		
+      <!-- Container for the left control panel (layers panel)-->
 		<a-gui-flex-container 
 			flex-direction="column" justify-content="flexStart" align-items="center" item-padding="0.1" component-padding="0.1" opacity="0.7" width="1" height="2"
-			position="-2.5 2 -1.7" rotation="0 30 0"
+			position="-2.6 2 -1.8" rotation="0 30 0"
 		>
-			<a-gui-label 
-				width="1" height="0.3"
+			<!--------------------------------->
+			<a-entity >
+				<a-entity id="dropdownContainer" position="0 0 0">
+					<a-gui-flex-container
+						flex-direction="row" justify-content="center" align-items="normal" component-padding="0.1" 
+						opacity="0" width="0.7" height="0.3"
+						position="0 0.375 0" rotation="0 0 0"
+					>
+						<a-gui-icon-label-button
+							width="0.7" height="0.3"
+							onclick="openDropdown"
+							icon="android-menu"
+							value="dropdown"
+							font-size="30px"
+							font-family="Arial"
+							visible="true"
+						>
+							<a-animation attribute="rotation" id="dropani"
+								begin="opendropdown"
+								dur="1000"
+								fill="forwards"
+								to="180 0 0"></a-animation>
+							<a-animation attribute="visible" id="dropani1"
+								begin="opendropdown"
+								fill="forwards"
+								delay="500"
+								to="false"></a-animation>						
+							<a-animation attribute="rotation" id="dropaniback"
+								begin="closedropdown"
+								dur="1000"
+								fill="forwards"
+								to="0 0 0"></a-animation>
+							<a-animation attribute="visible" id="dropani1back"
+								begin="closedropdown"
+								fill="forwards"
+								delay="500"
+								to="true"></a-animation>	
+						</a-gui-icon-label-button>				
+					</a-gui-flex-container>
+					
+					<a-gui-flex-container
+						flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1" 
+						opacity="0" width="0.7" height="0.3"
+						position="0 0 -0.15" rotation="0 0 0" scale="1 0.001 0.001"
+						visible="false" 
+					>
+						<a-gui-button 
+							width="0.7" height="0.3"
+							onclick="red"
+						    font-size="30px"
+							value="Red"
+							font-family="Arial"
+						>
+						</a-gui-button>
+						<a-gui-button 
+							width="0.7" height="0.3"
+							onclick="blue"
+							font-size="30px"
+							value="Blue"
+							font-family="Arial"
+						>
+						</a-gui-button>
+						<a-gui-button 
+							width="0.7" height="0.3"
+							onclick="green"
+							font-size="30px"
+							value="Green"
+							font-family="Arial"
+						>
+						</a-gui-button>
+						<a-gui-icon-button
+							width="0.2" height="0.2"
+							onclick="closeDropdown"
+							icon="android-close"
+						>
+						</a-gui-icon-button>
+	
+						<a-animation attribute="scale" id="dropvalani"
+							begin="opendropdown"
+							dur="1000"
+							fill="forwards"
+							to="1 1 1"></a-animation>	
+						<a-animation attribute="position" id="dropvalani1"
+							begin="opendropdown"
+							dur="1000"
+							fill="forwards"
+							to="0 0.375 0.15"></a-animation>						
+						<a-animation attribute="visible" id="dropvalani2"
+							begin="opendropdown"
+							fill="forwards"
+							dur="100"						
+							to="true"></a-animation>						
+	
+						<a-animation attribute="scale" id="dropvalaniback"
+							begin="closedropdown"
+							dur="1000"
+							fill="forwards"
+							to="1 0.001 0.001"></a-animation>	
+						<a-animation attribute="position" id="dropvalani1back"
+							begin="closedropdown"
+							dur="1000"
+							fill="forwards"
+							to="0 0 -0.15"></a-animation>						
+						<a-animation attribute="visible" id="dropvalani2back"
+							begin="closedropdown"
+							fill="forwards"
+							delay="500"
+							dur="100"						
+							to="false"></a-animation>						
+					</a-gui-flex-container>
+	
+				</a-entity>
+			</a-entity>
+			<!--------------------------------->
+		</a-gui-flex-container>
+		
+
+		
+		<!-- Second container for the bottom control panel -->
+		<a-gui-flex-container 
+			flex-direction="column" justify-content="flexStart" align-items="flexStart" item-padding="0.1" component-padding="0.1" opacity="0.7" width="2" height="0.7"
+			position="0 1 -1.3" rotation="-30 0 0"
+		>
+		
+					<a-gui-label 
+				width="1" height="0.2"
 				value="Map Layers"
 				font-family="Arial"
-				font-size="50px"
-				margin="0 0 0.05 0"
+				font-size="30px"
+				margin="0 0 0.05 0.05"
 			>
 			</a-gui-label>
-			<a-gui-button 
-				width=".8" height="0.3"
-				onclick="buttonActionFunction" key-code="32"
-				value="test button"
-				border-width="0.1"
-				font-size="30px"
-				font-family="Arial"
-				margin="0 0 0.05 0"
-			>
-			</a-gui-button>
+
 			<a-gui-toggle
-				width="1" height="0.3"
+				width="1" height="0.2"
 				onclick="testToggleAction"
 				value="world borders"
 				border-width="0.5"
-				font-size="30px"
+				font-size="20px"
 				font-family="Arial"
-				margin="0 0 0.05 0"
+				margin="0 0 0.05 0.05"
+			>
+			</a-gui-toggle>
+			<a-gui-toggle
+				width="1" height="0.2"
+				onclick="testToggleAction"
+				value="Ships route"
+				border-width="0.5"
+				font-size="20px"
+				font-family="Arial"
+				margin="0.05 0 0.05 0.05"
 			>
 			</a-gui-toggle>
 		</a-gui-flex-container>
+		
+		
      	<!-- In case we have VR controls -->
 		<a-entity laser-controls="hand: right"></a-entity>
 
@@ -116,6 +278,7 @@
 		  <a-cursor fuse="false" interval="1000"></a-cursor>
 		</a-camera> 
 		
+
  		<!-- Camera + cursor. -->
 		<!--<a-entity id="cameraRig" position="0 0 0">
 			<a-camera look-controls wasd-controls position="0 1.6 0">
@@ -126,6 +289,50 @@
 				</a-gui-cursor> /cursor
 			</a-camera> /camera
 		</a-entity> -->
+		<a-sky src="#gradient"></a-sky>
+  		<a-image position="0 -.025 0" height="300" width="300" rotation="90 0 0" src="#ground" repeat="300 300" material="color:#ebd9e9"></a-image>
+  		
     </a-scene>
+    	<script>
+		window.closeDropdown = function() {
+			console.log("closedropdown");
+			var animateDropdown = document.getElementById("dropaniback");
+            animateDropdown.emit('closedropdown');
+			var animateDropdown1 = document.getElementById("dropani1back");
+            animateDropdown1.emit('closedropdown');
+			var animateDropdownVal = document.getElementById("dropvalaniback");
+			var animateDropdownVal1 = document.getElementById("dropvalani1back");
+			var animateDropdownVal2 = document.getElementById("dropvalani2back");
+            animateDropdownVal.emit('closedropdown');
+            animateDropdownVal1.emit('closedropdown');
+            animateDropdownVal2.emit('closedropdown');
+		}
+		window.openDropdown = function() {
+			console.log("opendropdown");
+			var animateDropdown = document.getElementById("dropani");
+            animateDropdown.emit('opendropdown');
+			var animateDropdown1 = document.getElementById("dropani1");
+            animateDropdown1.emit('opendropdown');
+			var animateDropdownVal = document.getElementById("dropvalani");
+			var animateDropdownVal1 = document.getElementById("dropvalani1");
+			var animateDropdownVal2 = document.getElementById("dropvalani2");
+            animateDropdownVal.emit('opendropdown');
+            animateDropdownVal1.emit('opendropdown');
+            animateDropdownVal2.emit('opendropdown');
+		}
+	
+		window.red = function() {
+			var knot = document.getElementById("knot");
+			knot.setAttribute('material', 'color', '#DC2531');
+		}
+		window.green = function() {
+			var knot = document.getElementById("knot");
+			knot.setAttribute('material', 'color', '#69FFD2');		
+		}		
+		window.blue = function() {
+			var knot = document.getElementById("knot");
+			knot.setAttribute('material', 'color', '#1FA4E9');
+		}
+	</script>
   </body>
 </html>
