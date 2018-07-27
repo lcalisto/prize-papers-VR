@@ -1,0 +1,111 @@
+<!--------------------------------->
+				<a-entity id="dropdownContainer" position="0 0 0">
+					<a-gui-flex-container
+						flex-direction="row" justify-content="center" align-items="normal" component-padding="0.1" 
+						opacity="0" width="0.7" height="0.3"
+						position="0 0.375 0" rotation="0 0 0"
+					>
+						<a-gui-icon-label-button
+							width="0.7" height="0.3"
+							onclick="openDropdown"
+							icon="android-menu"
+							value="dropdown"
+							font-size="30px"
+							font-family="Arial"
+							visible="true"
+						>
+							<a-animation attribute="rotation" id="dropani"
+								begin="opendropdown"
+								dur="1000"
+								fill="forwards"
+								to="180 0 0"></a-animation>
+							<a-animation attribute="visible" id="dropani1"
+								begin="opendropdown"
+								fill="forwards"
+								delay="500"
+								to="false"></a-animation>						
+							<a-animation attribute="rotation" id="dropaniback"
+								begin="closedropdown"
+								dur="1000"
+								fill="forwards"
+								to="0 0 0"></a-animation>
+							<a-animation attribute="visible" id="dropani1back"
+								begin="closedropdown"
+								fill="forwards"
+								delay="500"
+								to="true"></a-animation>	
+						</a-gui-icon-label-button>				
+					</a-gui-flex-container>
+					
+					<a-gui-flex-container
+						flex-direction="column" justify-content="center" align-items="normal" component-padding="0.1" 
+						opacity="0" width="0.7" height="0.3"
+						position="0 0 -0.15" rotation="0 0 0" scale="1 0.001 0.001"
+						visible="false" 
+					>
+						<a-gui-button 
+							width="0.7" height="0.3"
+							onclick="red"
+						    font-size="30px"
+							value="Red"
+							font-family="Arial"
+						>
+						</a-gui-button>
+						<a-gui-button 
+							width="0.7" height="0.3"
+							onclick="blue"
+							font-size="30px"
+							value="Blue"
+							font-family="Arial"
+						>
+						</a-gui-button>
+						<a-gui-button 
+							width="0.7" height="0.3"
+							onclick="green"
+							font-size="30px"
+							value="Green"
+							font-family="Arial"
+						>
+						</a-gui-button>
+						<a-gui-icon-button
+							width="0.2" height="0.2"
+							onclick="closeDropdown"
+							icon="android-close"
+						>
+						</a-gui-icon-button>
+	
+						<a-animation attribute="scale" id="dropvalani"
+							begin="opendropdown"
+							dur="1000"
+							fill="forwards"
+							to="1 1 1"></a-animation>	
+						<a-animation attribute="position" id="dropvalani1"
+							begin="opendropdown"
+							dur="1000"
+							fill="forwards"
+							to="0 0.375 0.15"></a-animation>						
+						<a-animation attribute="visible" id="dropvalani2"
+							begin="opendropdown"
+							fill="forwards"
+							dur="100"						
+							to="true"></a-animation>						
+	
+						<a-animation attribute="scale" id="dropvalaniback"
+							begin="closedropdown"
+							dur="1000"
+							fill="forwards"
+							to="1 0.001 0.001"></a-animation>	
+						<a-animation attribute="position" id="dropvalani1back"
+							begin="closedropdown"
+							dur="1000"
+							fill="forwards"
+							to="0 0 -0.15"></a-animation>						
+						<a-animation attribute="visible" id="dropvalani2back"
+							begin="closedropdown"
+							fill="forwards"
+							delay="500"
+							dur="100"						
+							to="false"></a-animation>						
+					</a-gui-flex-container>
+				</a-entity>
+			<!--------------------------------->
