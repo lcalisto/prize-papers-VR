@@ -141,7 +141,7 @@ window.drawIcon = function (ctx, canvas, icon, color) {
 
         ctx.scale(size, size);
 
-        console.log("icon" + icon);
+        //console.log("icon" + icon);
         if (icon_font[icon]) {
             ctx.fillText(icon_font[icon], canvas.width / 2, canvas.height / 2);
         } else {
@@ -191,9 +191,9 @@ AFRAME.registerComponent('gui-button', {
         var data = this.data;
         var el = this.el;
         var guiItem = el.getAttribute("gui-item");
-        console.log("in button, guiItem: " + JSON.stringify(guiItem));
+        //console.log("in button, guiItem: " + JSON.stringify(guiItem));
         var guiInteractable = el.getAttribute("gui-interactable");
-        console.log("in button, guiInteractable: " + JSON.stringify(guiInteractable));
+        //console.log("in button, guiInteractable: " + JSON.stringify(guiInteractable));
         var multiplier = 350;
         var canvasWidth = guiItem.width * multiplier;
         var canvasHeight = guiItem.height * multiplier;
@@ -202,7 +202,7 @@ AFRAME.registerComponent('gui-button', {
         var canvasContainer = document.createElement('div');
         canvasContainer.setAttribute('class', 'visuallyhidden');
         document.body.appendChild(canvasContainer);
-        console.log("in gui-button init, data: " + JSON.stringify(data));
+        //console.log("in gui-button init, data: " + JSON.stringify(data));
         var canvas = document.createElement("canvas");
         this.canvas = canvas;
         canvas.setAttribute('width', canvasWidth);
@@ -225,7 +225,7 @@ AFRAME.registerComponent('gui-button', {
         el.appendChild(buttonContainer);
 
         var buttonEntity = document.createElement("a-entity");
-        buttonEntity.setAttribute('geometry', 'primitive: box; width: ' + (guiItem.width - 0.025) + '; height: ' + (guiItem.height - 0.025) + '; depth: 0.04;');
+        buttonEntity.setAttribute('geometry', 'primitive: box; width: ' + (guiItem.width - 0.015) + '; height: ' + (guiItem.height - 0.015) + '; depth: 0.04;');
         buttonEntity.setAttribute('material', 'shader: flat; opacity: 1; side:double; color: ' + data.backgroundColor);
         buttonEntity.setAttribute('rotation', '0 0 0');
         buttonEntity.setAttribute('position', '0 0 0.02');
@@ -268,22 +268,22 @@ AFRAME.registerComponent('gui-button', {
             }
             //            this.toggleState = !(this.toggleState);
 
-            //            console.log('I was clicked at: ', evt.detail.intersection.point);
+            //            //console.log('I was clicked at: ', evt.detail.intersection.point);
             var clickActionFunctionName = guiInteractable.clickAction;
-            console.log("in button, clickActionFunctionName: " + clickActionFunctionName);
+            //console.log("in button, clickActionFunctionName: " + clickActionFunctionName);
             // find object
             var clickActionFunction = window[clickActionFunctionName];
-            //console.log("clickActionFunction: "+clickActionFunction);
+            //////console.log("clickActionFunction: "+clickActionFunction);
             // is object a function?
             if (typeof clickActionFunction === "function") clickActionFunction();
         });
     },
     play: function play() {},
     update: function update(oldData) {
-        console.log("In button update, toggle: " + this.toggleState);
+        //console.log("In button update, toggle: " + this.toggleState);
     },
     setActiveState: function setActiveState(activeState) {
-        console.log("in setActiveState function");
+        //console.log("in setActiveState function");
         this.data.toggle = this.toggleState = activeState;
         if (!activeState) {
             this.buttonEntity.setAttribute('material', 'color', this.data.backgroundColor);
@@ -565,7 +565,7 @@ AFRAME.registerComponent('gui-cursor', {
 
         AFRAME.utils.entity.setComponentProperty(el, 'raycaster.interval', '500');
 
-        console.log("fuse: " + fuse + ", fuseTimeout: " + fuseTimeout);
+        //console.log("fuse: " + fuse + ", fuseTimeout: " + fuseTimeout);
 
         if (data.design == 'dot') {
 
@@ -1215,7 +1215,7 @@ AFRAME.registerComponent('gui-cursor', {
         }
 
         el.addEventListener('mouseenter', function () {
-            console.log("in gui-cursor mousenter, el: " + el);
+            //console.log("in gui-cursor mousenter, el: " + el);
             el.emit('hovergui');
             if (data.design == 'dot' || data.design == 'ring') {
                 cursorShadow.emit('hovergui');
@@ -1233,7 +1233,7 @@ AFRAME.registerComponent('gui-cursor', {
         });
 
         el.addEventListener('mouseleave', function () {
-            console.log("in gui-cursor mouseleave, el: " + el);
+            //console.log("in gui-cursor mouseleave, el: " + el);
             el.emit('leavegui');
             if (data.design == 'dot' || data.design == 'ring') {
                 cursorShadow.emit('leavegui');
@@ -1262,7 +1262,7 @@ AFRAME.registerComponent('gui-cursor', {
         }
 
         el.addEventListener("stateremoved", function (evt) {
-            console.log("evt.detail " + evt.detail);
+            //console.log("evt.detail " + evt.detail);
             if (evt.detail === 'cursor-fusing') {
                 if (data.design == 'dot' || data.design == 'ring' || data.design == 'cross') {
                     if (fuse) {
@@ -1381,7 +1381,7 @@ AFRAME.registerComponent('gui-flex-container', {
 
     },
     init: function init() {
-        console.log("in aframe-gui-component init for: " + this.el.getAttribute("id"));
+        //console.log("in aframe-gui-component init for: " + this.el.getAttribute("id"));
         var containerGuiItem = this.el.getAttribute("gui-item");
 
         if (this.data.isTopContainer) {
@@ -1392,8 +1392,8 @@ AFRAME.registerComponent('gui-flex-container', {
         this.el.setAttribute('material', 'shader: flat; transparent: true; opacity: ' + this.data.opacity + '; color: ' + this.data.panelColor + '; side:front;');
 
         this.children = this.el.getChildEntities();
-        console.log("childElements: " + this.children);
-        console.log("num child Elements: " + this.children.length);
+        //console.log("childElements: " + this.children);
+        //console.log("num child Elements: " + this.children.length);
 
         // coordinate system is 0, 0 in the top left
         var cursorX = 0;
@@ -1449,7 +1449,7 @@ AFRAME.registerComponent('gui-flex-container', {
                 cursorX = 0; // baseline is right
             }
         }
-        console.log('initial cursor position for ' + this.el.getAttribute("id") + ': ' + cursorX + ' ' + cursorY + ' 0.01');
+        //console.log('initial cursor position for ' + this.el.getAttribute("id") + ': ' + cursorX + ' ' + cursorY + ' 0.01');
 
         // not that cursor positions are determined, loop through and lay out items
         var wrapOffsetX = 0; // not used yet since wrapping isn't supported
@@ -1485,7 +1485,7 @@ AFRAME.registerComponent('gui-flex-container', {
                     childPositionY = containerGuiItem.height * 0.5 - cursorY - -childGuiItem.margin.x - childGuiItem.height * 0.5;
                     cursorY = cursorY + childGuiItem.margin.x + childGuiItem.height + childGuiItem.margin.z;
                 }
-                console.log('child element position for ' + childElement.id + ': ' + childPositionX + ' ' + childPositionY + ' ' + childPositionZ);
+                //console.log('child element position for ' + childElement.id + ': ' + childPositionX + ' ' + childPositionY + ' ' + childPositionZ);
                 childElement.setAttribute('position', childPositionX + ' ' + childPositionY + ' ' + childPositionZ);
                 childElement.setAttribute('geometry', 'primitive: plane; height: ' + childGuiItem.height + '; width: ' + childGuiItem.width + ';');
                 var childFlexContainer = childElement.components['gui-flex-container'];
@@ -1503,12 +1503,12 @@ AFRAME.registerComponent('gui-flex-container', {
     getElementSize: function getElementSize() {},
     setBackground: function setBackground() {
         if (this.data.opacity > 0) {
-            console.log("panel position: " + JSON.stringify(this.el.getAttribute("position")));
+            //console.log("panel position: " + JSON.stringify(this.el.getAttribute("position")));
             var guiItem = this.el.getAttribute("gui-item");
             var panelBackground = document.createElement("a-entity");
 
             panelBackground.setAttribute('geometry', 'primitive: box; height: ' + guiItem.height + '; width: ' + guiItem.width + '; depth:0.025;');
-            console.log("about to set panel background color to: : " + this.data.panelColor);
+            //console.log("about to set panel background color to: : " + this.data.panelColor);
             panelBackground.setAttribute('material', 'shader: standard; depthTest: true; opacity: ' + this.data.opacity + '; color: ' + this.data.panelColor + ';');
             panelBackground.setAttribute('position', this.el.getAttribute("position").x + ' ' + this.el.getAttribute("position").y + ' ' + (this.el.getAttribute("position").z - 0.0125));
             panelBackground.setAttribute('rotation', this.el.getAttribute("rotation").x + ' ' + this.el.getAttribute("rotation").y + ' ' + this.el.getAttribute("rotation").z);
@@ -1644,21 +1644,21 @@ AFRAME.registerComponent('gui-icon-button', {
             }
             this.toggleState = !this.toggleState;
 
-            //console.log('I was clicked at: ', evt.detail.intersection.point);
+            //////console.log('I was clicked at: ', evt.detail.intersection.point);
             var guiInteractable = el.getAttribute("gui-interactable");
-            //console.log("guiInteractable: "+guiInteractable);
+            //////console.log("guiInteractable: "+guiInteractable);
             var clickActionFunctionName = guiInteractable.clickAction;
-            //console.log("clickActionFunctionName: "+clickActionFunctionName);
+            //////console.log("clickActionFunctionName: "+clickActionFunctionName);
             // find object
             var clickActionFunction = window[clickActionFunctionName];
-            //console.log("clickActionFunction: "+clickActionFunction);
+            //////console.log("clickActionFunction: "+clickActionFunction);
             // is object a function?
             if (typeof clickActionFunction === "function") clickActionFunction();
         });
     },
     play: function play() {},
     update: function update(oldData) {
-        console.log("In button update, toggle: " + this.toggleState);
+        //console.log("In button update, toggle: " + this.toggleState);
     }
 });
 
@@ -1826,21 +1826,21 @@ AFRAME.registerComponent('gui-icon-label-button', {
             }
             this.toggleState = !this.toggleState;
 
-            //            console.log('I was clicked at: ', evt.detail.intersection.point);
+            //            //console.log('I was clicked at: ', evt.detail.intersection.point);
             var guiInteractable = el.getAttribute("gui-interactable");
-            //            console.log("guiInteractable: "+guiInteractable);
+            //            //console.log("guiInteractable: "+guiInteractable);
             var clickActionFunctionName = guiInteractable.clickAction;
-            //            console.log("clickActionFunctionName: "+clickActionFunctionName);
+            //            //console.log("clickActionFunctionName: "+clickActionFunctionName);
             // find object
             var clickActionFunction = window[clickActionFunctionName];
-            //console.log("clickActionFunction: "+clickActionFunction);
+            //////console.log("clickActionFunction: "+clickActionFunction);
             // is object a function?
             if (typeof clickActionFunction === "function") clickActionFunction();
         });
     },
     play: function play() {},
     update: function update(oldData) {
-        console.log("In button update, toggle: " + this.toggleState);
+        //console.log("In button update, toggle: " + this.toggleState);
     }
 });
 
@@ -1968,14 +1968,14 @@ AFRAME.registerComponent('gui-input', {
         });
 
         el.addEventListener(data.on, function (evt) {
-            console.log('I was clicked at: ', evt.detail.intersection.point);
+            //console.log('I was clicked at: ', evt.detail.intersection.point);
             var guiInteractable = el.getAttribute("gui-interactable");
-            console.log("guiInteractable: " + guiInteractable);
+            //console.log("guiInteractable: " + guiInteractable);
             var clickActionFunctionName = guiInteractable.clickAction;
-            console.log("clickActionFunctionName: " + clickActionFunctionName);
+            //console.log("clickActionFunctionName: " + clickActionFunctionName);
             // find object
             var clickActionFunction = window[clickActionFunctionName];
-            //console.log("clickActionFunction: "+clickActionFunction);
+            //////console.log("clickActionFunction: "+clickActionFunction);
             // is object a function?
             if (typeof clickActionFunction === "function") clickActionFunction();
         });
@@ -2032,7 +2032,7 @@ AFRAME.registerComponent('gui-interactable', {
         if (data.keyCode) {
             window.addEventListener("keydown", function (event) {
                 if (event.keyCode == data.keyCode) {
-                    console.log("key press by gui-interactable : " + data.keyCode);
+                    //console.log("key press by gui-interactable : " + data.keyCode);
                     el.emit('click');
                 }
                 event.preventDefault();
@@ -2349,17 +2349,17 @@ AFRAME.registerComponent('gui-radio', {
         });
 
         el.addEventListener(data.on, function (evt) {
-            // console.log('I was clicked at: ', evt.detail.intersection.point); // Commented out to use own made click event without defining detail
+            // //console.log('I was clicked at: ', evt.detail.intersection.point); // Commented out to use own made click event without defining detail
             data.checked = !data.checked;
 
             radioColorAnimation.emit('radioAnimation');
             var guiInteractable = el.getAttribute("gui-interactable");
-            console.log("guiInteractable: " + guiInteractable);
+            //console.log("guiInteractable: " + guiInteractable);
             var clickActionFunctionName = guiInteractable.clickAction;
-            console.log("clickActionFunctionName: " + clickActionFunctionName);
+            //console.log("clickActionFunctionName: " + clickActionFunctionName);
             // find object
             var clickActionFunction = window[clickActionFunctionName];
-            //console.log("clickActionFunction: "+clickActionFunction);
+            //////console.log("clickActionFunction: "+clickActionFunction);
             // is object a function?
             if (typeof clickActionFunction === "function") clickActionFunction();
         });
@@ -2475,10 +2475,10 @@ AFRAME.registerComponent('gui-slider', {
         });
 
         el.addEventListener('click', function (evt) {
-            console.log('I was clicked at: ', evt.detail.intersection.point);
+            //console.log('I was clicked at: ', evt.detail.intersection.point);
             var localCoordinates = el.object3D.worldToLocal(evt.detail.intersection.point);
-            console.log('local coordinates: ', localCoordinates);
-            console.log('current percent: ' + data.percent);
+            //console.log('local coordinates: ', localCoordinates);
+            //console.log('current percent: ' + data.percent);
             var sliderBarWidth = 2; // total width of slider bar
             if (localCoordinates.x <= -sliderBarWidth / 2) {
                 data.percent = 0;
@@ -2487,19 +2487,19 @@ AFRAME.registerComponent('gui-slider', {
             } else {
                 data.percent = (localCoordinates.x + sliderBarWidth / 2) / sliderBarWidth;
             }
-            console.log("handle container: " + handleContainer);
+            //console.log("handle container: " + handleContainer);
             sliderActiveBar.setAttribute('geometry', 'primitive: box; width: ' + data.percent * 2 + '; height: 0.05; depth: 0.03;');
             sliderActiveBar.setAttribute('position', data.percent - 1 + ' 0 0.02');
             sliderBar.setAttribute('geometry', 'primitive: box; width: ' + (2 - data.percent * 2) + '; height: 0.05; depth: 0.03;');
             sliderBar.setAttribute('position', data.percent * 1 + ' 0 0.02');
             handleContainer.setAttribute('position', data.percent * 2 - 1 + ' 0 0.03');
             var guiInteractable = el.getAttribute("gui-interactable");
-            console.log("guiInteractable: " + guiInteractable);
+            //console.log("guiInteractable: " + guiInteractable);
             var clickActionFunctionName = guiInteractable.clickAction;
-            console.log("clickActionFunctionName: " + clickActionFunctionName);
+            //console.log("clickActionFunctionName: " + clickActionFunctionName);
             // find object
             var clickActionFunction = window[clickActionFunctionName];
-            //console.log("clickActionFunction: "+clickActionFunction);
+            //////console.log("clickActionFunction: "+clickActionFunction);
             // is object a function?
             if (typeof clickActionFunction === "function") clickActionFunction();
         });
@@ -2671,17 +2671,17 @@ AFRAME.registerComponent('gui-toggle', {
         });
 
         el.addEventListener(data.on, function (evt) {
-            console.log('I was clicked at: ', evt.detail.intersection.point);
+            //console.log('I was clicked at: ', evt.detail.intersection.point);
             data.checked = !data.checked;
             toggleColorAnimation.emit('toggleAnimation');
             toggleHandleAnimation.emit('toggleAnimation');
             var guiInteractable = el.getAttribute("gui-interactable");
-            console.log("guiInteractable: " + guiInteractable);
+            //console.log("guiInteractable: " + guiInteractable);
             var clickActionFunctionName = guiInteractable.clickAction;
-            console.log("clickActionFunctionName: " + clickActionFunctionName);
+            //console.log("clickActionFunctionName: " + clickActionFunctionName);
             // find object
             var clickActionFunction = window[clickActionFunctionName];
-            //console.log("clickActionFunction: "+clickActionFunction);
+            //////console.log("clickActionFunction: "+clickActionFunction);
             // is object a function?
             if (typeof clickActionFunction === "function") clickActionFunction();
         });
