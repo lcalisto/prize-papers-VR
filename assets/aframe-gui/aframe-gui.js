@@ -2582,6 +2582,11 @@ AFRAME.registerComponent('gui-toggle', {
         toggleBox.setAttribute('height', guiItem.height * 0.5);
         toggleBox.setAttribute('depth', '0.01');
         toggleBox.setAttribute('material', 'color:' + data.borderColor + '; shader: flat;');
+        if(data.checked){
+        	toggleBox.setAttribute('material', 'color:' + data.activeColor + '; shader: flat;');
+        }else{
+        	toggleBox.setAttribute('material', 'color:' + data.borderColor + '; shader: flat;');
+        }
         toggleBox.setAttribute('position', toggleBoxX + ' 0 0');
         el.appendChild(toggleBox);
 
@@ -2589,8 +2594,13 @@ AFRAME.registerComponent('gui-toggle', {
         toggleColorAnimation.setAttribute('begin', 'toggleAnimation');
         toggleColorAnimation.setAttribute('direction', 'alternate');
         toggleColorAnimation.setAttribute('attribute', 'material.color');
-        toggleColorAnimation.setAttribute('from', '' + data.borderColor);
-        toggleColorAnimation.setAttribute('to', '' + data.activeColor);
+        if(data.checked){
+            toggleColorAnimation.setAttribute('to', '' + data.borderColor);
+            toggleColorAnimation.setAttribute('from', '' + data.activeColor);
+        }else{
+            toggleColorAnimation.setAttribute('from', '' + data.borderColor);
+            toggleColorAnimation.setAttribute('to', '' + data.activeColor);
+        }
         toggleColorAnimation.setAttribute('dur', '50');
         toggleColorAnimation.setAttribute('easing', 'ease-in-out-cubic');
         toggleBox.appendChild(toggleColorAnimation);
@@ -2604,15 +2614,24 @@ AFRAME.registerComponent('gui-toggle', {
         toggleHandle.setAttribute('height', guiItem.height * 0.4);
         toggleHandle.setAttribute('depth', '0.02');
         toggleHandle.setAttribute('material', 'color:' + data.handleColor);
-        toggleHandle.setAttribute('position', toggleHandleXStart + ' 0 0.02');
+        if(data.checked){
+        	toggleHandle.setAttribute('position', toggleHandleXEnd + ' 0 0.02');
+        }else{
+        	toggleHandle.setAttribute('position', toggleHandleXStart + ' 0 0.02');
+        }
         toggleBox.appendChild(toggleHandle);
 
         var toggleHandleAnimation = document.createElement("a-animation");
         toggleHandleAnimation.setAttribute('begin', 'toggleAnimation');
         toggleHandleAnimation.setAttribute('direction', 'alternate');
         toggleHandleAnimation.setAttribute('attribute', 'position');
-        toggleHandleAnimation.setAttribute('from', toggleHandleXStart + ' 0 0.02');
-        toggleHandleAnimation.setAttribute('to', toggleHandleXEnd + ' 0 0.02');
+        if(data.checked){
+            toggleHandleAnimation.setAttribute('to', toggleHandleXStart + ' 0 0.02');
+            toggleHandleAnimation.setAttribute('from', toggleHandleXEnd + ' 0 0.02');
+        }else{
+            toggleHandleAnimation.setAttribute('from', toggleHandleXStart + ' 0 0.02');
+            toggleHandleAnimation.setAttribute('to', toggleHandleXEnd + ' 0 0.02');
+        }
         toggleHandleAnimation.setAttribute('dur', '50');
         toggleHandleAnimation.setAttribute('easing', 'ease-in-out-cubic');
         toggleHandle.appendChild(toggleHandleAnimation);

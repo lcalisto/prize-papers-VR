@@ -16,83 +16,14 @@
     <link rel="stylesheet" href="assets/aframe-gui/icons.css" type="text/css">
     <!-- main JS file -->
    <script src="js/app.js"></script> 
-     <script>
-     
-
-		//// Create one openlayers map
-		var source1 = new ol.source.OSM();
-		var layer1 = new ol.layer.Tile({
-		  source: source1
-		});
-		var source2 = new ol.source.Vector({
-		    url: 'https://openlayers.org/en/v4.6.5/examples/data/geojson/countries.geojson',
-		    format: new ol.format.GeoJSON()
-		});
-		var layer2 = new ol.layer.Vector({
-		    source: source2
-		});
-			var source3 = new ol.source.Vector({
-			    url: 'https://sigap.calisto.pt/prize-papers-api/ships?or_country=portugal',
-			    format: new ol.format.GeoJSON()
-			});
-			var layer3 = new ol.layer.Vector({
-			    source: source3
-			}); 
-		var map = new ol.Map({
-		    layers: [
-		        layer1,
-		        layer2,
-		        layer3
-		    ],
-		    target: 'map',
-		    controls: ol.control.defaults({
-		        attributionOptions: {
-		            collapsible: false
-		        }
-		    }),
-		    view: new ol.View({
-		        center: [0, 0],
-		        zoom: 0.7
-		    })
-		});
-		//// Create one interaction
-		var select = new ol.interaction.Select({
-		    condition: ol.events.condition.click //Click interaction
-		  });
-		map.addInteraction(select);
-		select.on('select', function(e) {
-			if(e.selected.length>0){
-				//console.log(e.selected[0].getGeometry().getExtent());
-			}
-			else{
-				
-			}
-		  });
-/* 		  // Replace ./data.json with your JSON feed
-	     fetch('https://sigap.calisto.pt/prize-papers-api/ships?or_country=portugal').then(response => {
-	       return response.json();
-	     }).then(data => {
-	       // Work with JSON data here
-	       console.log(data.geodata);
- 			var source3 = new ol.source.Vector({
-			    url: 'http://localhost:5000/ships?country=portugal',
-			    format: new ol.format.GeoJSON()
-			});
-			var layer3 = new ol.layer.Vector({
-			    source: source3
-			}); 
-			map.addLayer(layer3);
-	     }).catch(err => {
-	       // Do something for an error here
-	     }); */
-	 </script>
   </head>
   <body>
-    <a-scene>
+    <a-scene stats >
 		<a-assets>
 		    <div id="map"></div>
 		    <img id="gradient" src="assets/gradient.png">
 			<img id="ground" src="assets/ground.png">
+			<video id="ctlLoadingVideo" autoplay loop="true" src="assets/loading.mp4"></video>
 			<a-asset-item id="iconfont" src="assets/fonts/ionicons.ttf"></a-asset-item>
 			<a-asset-item id="fontfamily" src="https://fonts.googleapis.com/css?family=Fira+Sans"></a-asset-item>
 			<a-asset-item id="iconfont" src="assets/fonts/ionicons.ttf"></a-asset-item>
@@ -100,7 +31,7 @@
       	
       
 		 <a-plane 
-		   position="0 2 -2.5" 
+		   position="0 2 -3" 
 		   height="2" 
 		   width="4" 
 		   color="#c4c4c4"
@@ -116,12 +47,17 @@
 			position="-2.6 2 -1.8" rotation="0 30 0"
 		>
 		</a-gui-flex-container>
-
 		<!-- create the control panel -->
-		<a-entity id="ctlPanel" position="0.05 1 -1.3" rotation="-30 0 0">
+		<a-entity id="loadingCtlPanel" visible="true" position="0.05 1 -1.3" rotation="-30 0 0" >
+		    <a-plane color="#232123" width="2" height="0.75"> 
+		    </a-plane>
+			<a-video src="#ctlLoadingVideo" width="0.5" height="0.5" position="0 0 0.01"></a-video>
+		</a-entity>
+		<!-- create the control panel -->
+		<a-entity id="ctlPanel" visible="true" position="0.05 1 -1.3" rotation="-30 0 0">
 			<!-- panel index -->
 			<a-gui-flex-container 
-				flex-direction="column" justify-content="flexStart" align-items="flexStart" item-padding="0.1" component-padding="0.1" opacity="0.7" width="0.5" height="0.7"
+				flex-direction="column" justify-content="flexStart" align-items="flexStart" item-padding="0.1" component-padding="0.1" opacity="0.7" width="0.5" height="0.75"
 				position="-0.8 0 0"
 			>
 				<a-gui-label 
@@ -133,67 +69,68 @@
 					>
 				</a-gui-label>
 				<a-gui-toggle 
-				    id="ctlFilterBtn"
-					width="0.5" height="0.08"
+				    id="ctlYear1700"
+					width="0.5" height="0.07"
 					value=".. 1700 - 1709"
-					onclick="onFilterBtn"
+					checked=true
+					onclick='getAPIUserSelData'
 					font-family="Arial"
 					font-size="15px"
-					margin="0 0 0.02 0.01"
+					margin="0 0 0.02 0.00"
 				>
 				</a-gui-toggle>
 				<a-gui-toggle 
-					id="ctlMapSettingsBtn"
-					width="0.5" height="0.08"
-					value=".. 1710 - 1719"
-					onclick="onMapSettingsBtn"
+					id="ctlYear1710"
+					width="0.5" height="0.07"
+					value=".. 1710 - 1720"
+					onclick='getAPIUserSelData'
 					font-family="Arial"
 					font-size="15px"
-					margin="0 0 0.02 0.01"
+					margin="0 0 0.02 0.00"
 				>
 				</a-gui-toggle>
 				<a-gui-toggle 
-					id="ctlMapSettingsBtn"
-					width="0.5" height="0.08"
+					id="ctlYear1770"
+					width="0.5" height="0.07"
 					value=".. 1770 - 1779"
 					toggle="true"
-					onclick="onMapSettingsBtn"
+					onclick='getAPIUserSelData'
 					font-family="Arial"
 					font-size="15px"
-					margin="0 0 0.02 0.01"
+					margin="0 0 0.02 0.00"
 				>
 				</a-gui-toggle>
 				<a-gui-toggle
-					id="ctlMapSettingsBtn"
-					width="0.5" height="0.08"
+					id="ctlYear1780"
+					width="0.5" height="0.07"
 					value=".. 1780 - 1789"
 					toggle="true"
-					onclick="onMapSettingsBtn"
+					onclick='getAPIUserSelData'
 					font-family="Arial"
 					font-size="15px"
-					margin="0 0 0.02 0.01"
+					margin="0 0 0.02 0.00"
 				>
 				</a-gui-toggle>
 				<a-gui-toggle
-					id="ctlMapSettingsBtn"
-					width="0.5" height="0.08"
+					id="ctlYear1790"
+					width="0.5" height="0.07"
 					value=".. 1790 - 1799"
 					toggle="true"
-					onclick="onMapSettingsBtn"
+					onclick='getAPIUserSelData'
 					font-family="Arial"
 					font-size="15px"
-					margin="0 0 0.02 0.01"
+					margin="0 0 0.02 0.00"
 				>
 				</a-gui-toggle>
 				<a-gui-toggle
-					id="ctlMapSettingsBtn"
-					width="0.5" height="0.08"
+					id="ctlYear1800"
+					width="0.5" height="0.07"
 					value=".. 1800 - 1803"
 					toggle="true"
-					onclick="onMapSettingsBtn"
+					onclick='getAPIUserSelData'
 					font-family="Arial"
 					font-size="15px"
-					margin="0 0 0.02 0.01"
+					margin="0 0 0.02 0.00"
 				>
 				</a-gui-toggle>
 				<a-entity 	gui-item="type: flex-container; width: 0.5; height: 0.08;"
@@ -202,59 +139,334 @@
 				>
 				<a-gui-button 
 					id="ctlMapSettingsBtn"
-					width="0.2" height="0.08"
+					width="0.2" height="0.07"
 					value="costum"
 					toggle="true"
-					onclick="onMapSettingsBtn"
+					onclick='getAPIUserSelData'
 					font-family="Arial"
 					font-size="15px"
-					margin="0 0 0.02 0.01"
+					margin="0 0 0.02 0.00"
 				>
 				</a-gui-button>
 				<a-gui-button 
 					id="ctlMapSettingsBtn"
-					width="0.2" height="0.08"
+					width="0.2" height="0.07"
 					value="costum2"
 					toggle="true"
-					onclick="onMapSettingsBtn"
+					onclick='getAPIUserSelData'
 					font-family="Arial"
 					font-size="15px"
-					margin="0 0 0.02 0.01"
+					margin="0 0 0.02 0.00"
 				>
 				</a-gui-button>
 			</a-entity>
 			</a-gui-flex-container>
 			<!-- panel Origin country -->
 			<a-gui-flex-container 
-				flex-direction="column" justify-content="flexStart" align-items="flexStart" item-padding="0.1" component-padding="0.1" opacity="0.7" width="0.5" height="0.7"
+				flex-direction="column" justify-content="flexStart" align-items="flexStart" item-padding="0.1" component-padding="0.1" opacity="0.7" width="0.5" height="0.83"
 				position="-0.28 0 0" visible="true"
 			>
 					<a-gui-label 
 						width="0.5" height="0.09"
 						value="Ship origin country"
 						font-family="Arial"
+						checked=true
 						font-size="15px"
 						margin="0.00 0.00 0.02 0.0"
 					>
 					</a-gui-label>
-					<a-gui-button
-						width="0.3" height="0.09"
-						onclick="buttonActionFunction"
-						value="Fr"
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						id="ctlOrCountryFrance"
+						onclick='getAPIUserSelData'
+						value="France"
+						checked=true
 						font-size="15px"
 						font-family="Arial"
-						margin="0 0 0.02 0.01"
+						margin="0 0 0.02 0.00"
 					>
-					</a-gui-button>
-					<a-gui-button
-						width="0.3" height="0.09"
-						onclick="buttonActionFunction"
-						value="Nl"
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="USA"
+						id="ctlOrCountryUSA"
+						checked=true
 						font-size="15px"
 						font-family="Arial"
-						margin="0 0 0.02 0.01"
+						margin="0 0 0.02 0.00"
 					>
-					</a-gui-button>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Germany"
+						id="ctlOrCountryGermany"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Netherlands"
+						id="ctlOrCountryNetherlands"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="England"
+						id="ctlOrCountryEngland"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Sweden"
+						id="ctlOrCountrySweden"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Portugal"
+						id="ctlOrCountryPortugal"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Others"
+						id="ctlOrCountryOthers"
+						checked=false
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+			</a-gui-flex-container>
+			<!-- panel Jorney Begins -->
+			<a-gui-flex-container 
+				flex-direction="column" justify-content="flexStart" align-items="flexStart" item-padding="0.1" component-padding="0.1" opacity="0.7" width="0.5" height="0.83"
+				position="0.24 0 0" visible="true"
+			>
+					<a-gui-label 
+						width="0.5" height="0.09"
+						value="Jorney begins at:"
+						font-family="Arial"
+						font-size="15px"
+						margin="0.00 0.00 0.02 0.0"
+					>
+					</a-gui-label>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="France"
+						id="ctlJbCountryFrance"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="USA"
+						id="ctlJbCountryUSA"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Spain"
+						id="ctlJbCountrySpain"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Netherlands"
+						id="ctlJbCountryNetherlands"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="England"
+						id="ctlJbCountryEngland"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Germany"
+						id="ctlJbCountryGermany"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Haiti"
+						id="ctlJbCountryHaiti"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Others"
+						id="ctlJbCountryOthers"
+						checked=false
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+			</a-gui-flex-container>
+			<!-- panel Jorney Ends -->
+			<a-gui-flex-container 
+				flex-direction="column" justify-content="flexStart" align-items="flexStart" item-padding="0.1" component-padding="0.1" opacity="0.7" width="0.5" height="0.83"
+				position="0.76 0 0" visible="true"
+			>
+					<a-gui-label 
+						width="0.5" height="0.09"
+						value="Jorney ends at:"
+						font-family="Arial"
+						font-size="15px"
+						margin="0.00 0.00 0.02 0.0"
+					>
+					</a-gui-label>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="France"
+						id="ctlJeCountryFrance"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="USA"
+						id="ctlJeCountryUSA"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Spain"
+						id="ctlJeCountrySpain"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="England"
+						id="ctlJeCountryEngland"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Netherlands"
+						id="ctlJeCountryNetherlands"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Germany"
+						id="ctlJeCountryGermany"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Portugal"
+						id="ctlJeCountryPortugal"
+						checked=true
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
+					<a-gui-toggle
+						width="0.5" height="0.07"
+						onclick='getAPIUserSelData'
+						value="Others"
+						id="ctlJeCountryOthers"
+						checked=false
+						font-size="15px"
+						font-family="Arial"
+						margin="0 0 0.02 0.00"
+					>
+					</a-gui-toggle>
 			</a-gui-flex-container>
 
 			
@@ -291,7 +503,8 @@
 
  		<a-camera id="camera" position="0 1.6 0"  look-controls wasd-controls-enabled="true" >
 		  <a-text id="infoText" color="grey" value="" position="0 -0.2 -1" scale="0.4 0.4 0.4"></a-text>
-		  <a-cursor fuse="false" interval="1000"></a-cursor>
+		  <!-- Carefull with long fuse times or buttons will act strange in desktop browser -->
+		  <a-cursor fuse="false" ></a-cursor>
 		</a-camera> 
 		
 

@@ -1,13 +1,41 @@
-function onFilterBtn(){
-//	var ctlMapSettingsBtn=document.getElementById('ctlMapSettingsBtn');
-//	ctlMapSettingsBtn.components['gui-button'].setActiveState(false);
-//	var ctlFilterBtn=document.getElementById('ctlFilterBtn');
-//	ctlFilterBtn.components['gui-button'].setActiveState(true);
-}
+/* 
+ * Globals and configuration parameters
+ */
+or_countriesList=null;
+jb_countriesList=null;
+je_countriesList=null;
+APIendpoint='../prize-papers-api/';
 
-function onMapSettingsBtn(){
-//	var ctlFilterBtn=document.getElementById('ctlFilterBtn');
-//	ctlFilterBtn.components['gui-button'].setActiveState(false);
-//	var ctlMapSettingsBtn=document.getElementById('ctlMapSettingsBtn');
-//	ctlMapSettingsBtn.components['gui-button'].setActiveState(true);
-}
+
+/* 
+ * First lets load all needed js files. (kind of a import statement) This way we organize the code in a better way
+ */
+var modules=['js/ctlPanel.js','js/mainMap.js','js/mapFunctions.js']
+modules.forEach(url=>{
+	var script = document.createElement("script");
+	script.src = url; 
+	document.head.appendChild(script); 
+});
+
+
+ // Get all countries, For the moment lets hardcode so the app gets faster
+
+var countries = {"data": {"jb_countries": ["Guatemala", "Libya", "Turkey", "Germany", "France", "RUSSIA SCAN", "Turks and Caicos", "unknown Africa", "Sao Tome and Principe", "Jamaica", "Sint Eustatius", "Ecuador", "St Vincent and Grenadines", "Grenada", "Denmark", "Lithuania", "Bangladesh", "Curacao", "Netherlands", "Gambia", "Barbados", "Nigeria", "Sint Maarten", "Scotland", "Egypt", "Suriname", "Guyana", "Sierra Leone", "Bahamas", "Bermuda", "Virgin Islands", "Argentina", "Angola", "Northern Ireland", "Cuba", "Ghana", "Sao Miguel, Azores, Portugal", "Gabon", "Brazil", "Senegal", "Israel", "Falkland Islands", "Chile", "USA", "Terceira", "Finland", "Mexico", "Russia scan", "Sri Lanka", "England", "Latvia", "Estonia", "Venezuela", "Peru", "Algeria", "Uruguay", "Spain", "St Kitts and Nevis", "GERMANY", "Ireland", "Haiti", "Wales", "La Reunion", "Portugal", "Ilha do Faial, Azores, Portugal", "Dominica", "Cape Verde Islands", "Congo", "Puerto Rico", "Trinidad and Tobago", "Canada", "China", "Panama", "South Africa", "Mauritius", "Poland", "Antigua", "Honduras", "Canary Islands", "Tunisia", "Italy", "Sweden", "French Guyana", "Malta", "Greece", "India", "Yemen", "Montserrat", "Philippines", "Morocco", "Greenland", "Indonesia", "Belgium", "unknown West Indies", "Martinique", "Guadeloupe", "Madeira, Azores, Portugal", "Norway"], "je_countries": ["Turkey", "Libya", "Germany", "France", "RUSSIA SCAN", "Turks and Caicos", "x", "unknown Africa", "Jamaica", "Sint Eustatius", "St Vincent and Grenadines", "Grenada", "Denmark", "Syria", "Curacao", "Bangladesh", "Netherlands", "Barbados", "Nigeria", "Guinea", "Sint Maarten", "Scotland", "Guyana", "Suriname", "Sierra Leone", "Bermuda", "Bahamas", "Virgin Islands", "Benin", "Argentina", "Angola", "Oman", "Northern Ireland", "Cuba", "Brazil", "Sao Miguel, Azores, Portugal", "Senegal", "USA", "Mozambique", "Mexico", "Russia SCAN", "Finland", "England", "Latvia", "Estonia", "Venezuela", "Peru", "Algeria", "Uruguay", "Spain", "Saint-Barthelemy", "St Kitts and Nevis", "GERMANY", "Ireland", "Haiti", "Wales", "La Reunion", "Portugal", "Ilha do Faial, Azores, Portugal", "Dominica", "Trinidad and Tobago", "Puerto Rico", "Canada", "South Africa", "Mauritius", "Antigua", "Poland", "Honduras", "Canary Islands", "Tunisia", "Sweden", "Italy", "French Guyana", "Malta", "India", "Philippines", "Morocco", "Indonesia", "Belgium", "unknown West Indies", "Martinique", "Guadeloupe", "unknown Medit", "unknown Baltic", "Madeira, Azores, Portugal", "Norway"], "or_countries": ["England", "Latvia", "Estonia", "Montenegro", "Germany", "Venezuela", "Peru", "France", "RUSSIA SCAN", "x", "unknown Africa", "Uruguay", "Jamaica", "Spain", "Sint Eustatius", "St Kitts and Nevis", "St Vincent and Grenadines", "GERMANY", "Ireland", "Haiti", "Wales", "Grenada", "Denmark", "Lithuania", "Curacao", "Netherlands", "Portugal", "Gambia", "Scotland", "Puerto Rico", "Canada", "Suriname", "South Africa", "Bermuda", "Bahamas", "Mauritius", "Poland", "Virgin Islands", "Argentina", "Canary Islands", "Croatia", "Tunisia", "Northern Ireland", "Sweden", "Italy", "Cuba", "French Guyana", "Malta", "Greece", "India", "Brazil", "Philippines", "Morocco", "Senegal", "Indonesia", "Belgium", "USA", "Martinique", "Guadeloupe", "Russia Scan", "Finland", "Mexico", "Norway"]}};
+
+or_countriesList=countries.data.or_countries;
+jb_countriesList=countries.data.jb_countries;
+je_countriesList=countries.data.je_countries;
+
+// This data could come from the API like this
+//fetch(APIendpoint+'countries').then(response => {
+//return response.json();
+//}).then(data => {
+//or_countriesList=data.data.or_countries;
+//jb_countriesList=data.data.jb_countries;
+//je_countriesList=data.data.je_countries;
+//console.log('Finished getting countries data');
+//}).catch(err => {
+//// Do something for an error here
+//console.warn('Could not get countries data from server');
+//console.warn(err);
+//});
