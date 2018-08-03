@@ -10,7 +10,7 @@ APIendpoint='../prize-papers-api/';
 /* 
  * First lets load all needed js files. (kind of a import statement) This way we organize the code in a better way
  */
-var modules=['js/ctlPanel.js','js/mainMap.js','js/mapFunctions.js']
+var modules=['js/ctlPanel.js','js/maps.js','js/mapFunctions.js']
 modules.forEach(url=>{
 	var script = document.createElement("script");
 	script.src = url; 
@@ -26,16 +26,30 @@ or_countriesList=countries.data.or_countries;
 jb_countriesList=countries.data.jb_countries;
 je_countriesList=countries.data.je_countries;
 
-// This data could come from the API like this
-//fetch(APIendpoint+'countries').then(response => {
-//return response.json();
-//}).then(data => {
-//or_countriesList=data.data.or_countries;
-//jb_countriesList=data.data.jb_countries;
-//je_countriesList=data.data.je_countries;
-//console.log('Finished getting countries data');
-//}).catch(err => {
-//// Do something for an error here
-//console.warn('Could not get countries data from server');
-//console.warn(err);
-//});
+
+function getShipDetails(shipGid){
+	console.log(shipGid);
+	if (shipGid.toString().length>0){
+		//Construct the URL for GET request
+		var url=APIendpoint+'ship?gid='+shipGid.toString();
+		///////////////////// Fetch function /////////////////////////////////
+		fetch(url,{
+			method: "GET",
+			mode: "cors"
+		}).then(response => {
+			return response.json();
+		}).then(data => {
+			displayShipDetails(data);
+			
+		}).catch(err => {
+			console.warn('Could not get routes data from server');
+			console.warn(err);
+		});
+		/////////////////////////////////////////////////////
+	}else{
+		console.log('Id not set. Request is not made.')
+	}
+}
+function displayShipDetails(data){
+	console.log(data);
+}

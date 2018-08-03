@@ -18,11 +18,14 @@
    <script src="js/app.js"></script> 
   </head>
   <body>
-    <a-scene stats >
+    <a-scene id="mainScene" stats >
 		<a-assets>
 		    <div id="map"></div>
+		    <div id="routeMinimap"></div>
 		    <img id="gradient" src="assets/gradient.png">
 			<img id="ground" src="assets/ground.png">
+			<img id="initStat" src="assets/1700-1704.png">
+			<img id="heatmap" src="assets/heatmap.jpeg">
 			<video id="ctlLoadingVideo" autoplay loop="true" src="assets/loading.mp4"></video>
 			<a-asset-item id="iconfont" src="assets/fonts/ionicons.ttf"></a-asset-item>
 			<a-asset-item id="fontfamily" src="https://fonts.googleapis.com/css?family=Fira+Sans"></a-asset-item>
@@ -41,17 +44,94 @@
 			     OlEvent: click;
 		         pixToVRRatio:150;"
 		></a-plane>
-		<!-- Container for the left control panel (layers panel)-->
-		<a-gui-flex-container 
-			flex-direction="column" justify-content="flexStart" align-items="center" item-padding="0.1" component-padding="0.1" opacity="0.7" width="1" height="2"
-			position="-2.6 2 -1.8" rotation="0 30 0"
-		>
-		</a-gui-flex-container>
-		<!-- create the control panel -->
+		<!-- Container on the right-->
+		<a-entity id="rightPanel" visible="true" position="2.6 1.5 -1.8" rotation="0 -30 0" >
+			<a-plane 
+				id="detailedRouteMap"
+				position="0 1 0.1" 
+				rotation="15 0 0"
+				width="1.5" 
+				height="0.8"
+				color="#c4c4c4"
+				opacity="100"
+				ol="  map: routeDetailsMap;
+		         pixToVRRatio:150;"
+			>
+				<a-text id="detailedRouteWarning"
+						value="Select a route to show details."
+						color="#585858"
+						width= "1.5"
+						position="-0.4 0 0.1"
+				></a-text>
+			</a-plane>
+			
+			<!-- Panel to display ship information-->
+			<a-plane 
+				id="detailedShipInfo"
+				position="-0.5 0 0" 
+				width="1" 
+				height="1"
+				color="#FFFFFF"
+				opacity="100"
+			>
+				<a-text 
+						value="
+						Name: \t Liberty of Dunkirke;
+						Ship Age: \t unknown;
+						jb_place:
+						je_place:
+						or_place:
+						shipname:
+						jb_country:
+						je_country:
+						or_country:
+						shipownres:
+						shipsource:
+						shipcrewnat:
+						shipcrewtot:
+						shiptonnage:
+						shipcomments:
+						shipdateyear:
+						shipconstrplace:
+						shiptakenlocation:
+						"
+						color="#585858"
+						width= "1"
+						position="-0.4 0 0.1"
+				></a-text>
+			</a-plane>
+			<!-- Panel to display crew information-->
+			
+						<!-- Panel to display ship information-->
+			<a-plane 
+				id="detailedCrewInfo"
+				position="0.55 0 0"
+				width="1" height="1"
+				color="#FFFFFF"
+				opacity="100"
+			>
+				<a-text 
+						value="Interrogated crew members"
+						color="#585858"
+						width= "1"
+						position="-0.3 0.4 0"
+				></a-text>
+			</a-plane>
+		</a-entity>
+		<!-- Container on the left-->
+		<a-entity id="leftPanel" visible="true" position="-2.6 1.5 -1.8" rotation="0 30 0" >
+			<a-image src="#heatmap" position="0 1 0.1" rotation="15 0 0" width="1.5" height="0.8"></a-image>
+			<a-image src="#initStat" width="1.5" height="1"></a-image>
+			<a-gui-flex-container visible="false" flex-direction="column" justify-content="flexStart" align-items="center" 
+							item-padding="0.1" component-padding="0.1" opacity="0.7" width="1.5" height="1"
+			>
+			</a-gui-flex-container>
+		</a-entity>
+		<!-- create a loading panel -->
 		<a-entity id="loadingCtlPanel" visible="true" position="0.05 1 -1.3" rotation="-30 0 0" >
 		    <a-plane color="#232123" width="2" height="0.75"> 
 		    </a-plane>
-			<a-video src="#ctlLoadingVideo" width="0.5" height="0.5" position="0 0 0.01"></a-video>
+<!-- 			<a-video src="#ctlLoadingVideo" width="0.5" height="0.5" position="0 0 0.01"></a-video> -->
 		</a-entity>
 		<!-- create the control panel -->
 		<a-entity id="ctlPanel" visible="true" position="0.05 1 -1.3" rotation="-30 0 0">
@@ -469,33 +549,6 @@
 					</a-gui-toggle>
 			</a-gui-flex-container>
 
-			
-			<!-- panel map settings -->
-			<a-gui-flex-container 
-				flex-direction="column" justify-content="flexStart" align-items="flexStart" item-padding="0.1" component-padding="0.1" opacity="0.7" width="1.5" height="0.7"
-				position="0.2 0 0" visible="false"
-			>
-					<a-gui-toggle
-						width="1" height="0.2"
-						onclick="testToggleAction"
-						value="world borders"
-						border-width="0.5"
-						font-size="20px"
-						font-family="Arial"
-						margin="0 0 0.05 0.05"
-					>
-					</a-gui-toggle>
-					<a-gui-toggle
-						width="1" height="0.2"
-						onclick="testToggleAction"
-						value="Ships route"
-						border-width="0.5"
-						font-size="20px"
-						font-family="Arial"
-						margin="0.05 0 0.05 0.05"
-					>
-					</a-gui-toggle>
-			</a-gui-flex-container>
 		</a-entity>
 		
      	<!-- In case we have VR controls -->
@@ -519,7 +572,7 @@
 			</a-camera> /camera
 		</a-entity> -->
 		<a-sky src="#gradient"></a-sky>
-  		<a-image position="0 -.025 0" height="300" width="300" rotation="90 0 0" src="#ground" repeat="300 300" material="color:#ebd9e9"></a-image>
+   		<a-image position="0 -.025 0" height="300" width="300" rotation="90 0 0" src="#ground" repeat="300 300" material="color:#ebd9e9"></a-image>
   		
     </a-scene>
   </body>
