@@ -64,58 +64,75 @@
 						position="-0.4 0 0.1"
 				></a-text>
 			</a-plane>
-			
-			<!-- Panel to display ship information-->
 			<a-plane 
-				id="detailedShipInfo"
-				position="-0.5 0 0" 
-				width="1" 
-				height="1"
-				color="#FFFFFF"
-				opacity="100"
+					id="detailsShipInfo"
+					position="0 0 0" 
+					width="2.1" 
+					color="#FFFFFF"
+					height="1"
+					color="#FFFFFF"
+					opacity="100"
 			>
-				<a-text 
-						value="
-						Name: \t Liberty of Dunkirke;
-						Ship Age: \t unknown;
-						jb_place:
-						je_place:
-						or_place:
-						shipname:
-						jb_country:
-						je_country:
-						or_country:
-						shipownres:
-						shipsource:
-						shipcrewnat:
-						shipcrewtot:
-						shiptonnage:
-						shipcomments:
-						shipdateyear:
-						shipconstrplace:
-						shiptakenlocation:
-						"
-						color="#585858"
-						width= "1"
-						position="-0.4 0 0.1"
-				></a-text>
-			</a-plane>
-			<!-- Panel to display crew information-->
-			
-						<!-- Panel to display ship information-->
-			<a-plane 
-				id="detailedCrewInfo"
-				position="0.55 0 0"
-				width="1" height="1"
-				color="#FFFFFF"
-				opacity="100"
-			>
-				<a-text 
-						value="Interrogated crew members"
-						color="#585858"
-						width= "1"
-						position="-0.3 0.4 0"
-				></a-text>
+				<!-- Ship information-->
+				<a-entity 
+					id="detailedShipInfo"
+					position="-0.5 0 0" 
+					width="1" 
+					height="1"
+				><a-text id="shidDetailsTitle"
+							wrap-count="35"
+							align="center"
+							value="Ship title"	
+							color="#585858"
+							width= "1"
+							position="0 0.45 0.01"
+					></a-text>
+					<a-text id="shidDetailsText"
+							align="left"
+							wrap-count="50"
+							anchor="center"
+							baseline="top"
+							value="
+							"
+							color="#585858"
+							width= "0.95"
+							position="0 0.35 0"
+					></a-text>
+				</a-entity>
+				<a-plane
+					id="detailsSeparator"
+					position="0 0 0.01" 
+					width="0.01" 
+					color="grey"
+					height="0.9"
+					opacity="100"
+				>
+				</a-plane>
+				<!-- Crew information-->
+				<a-entity 
+					id="detailedCrewInfo"
+					position="0.55 0 0"
+					width="1" height="1"
+				><a-text id="crewDetailsTitle"
+							wrap-count="35"
+							align="center"
+							value="Interrogated crew members"	
+							color="#585858"
+							width= "1"
+							position="0 0.45 0.01"
+					></a-text>
+					<a-text id="crewDetailsText"
+							align="left"
+							wrap-count="50"
+							anchor="center"
+							baseline="top"
+							value="
+							"
+							color="#585858"
+							width= "0.95"
+							position="0 0.35 0"
+					></a-text>
+				</a-entity>
 			</a-plane>
 		</a-entity>
 		<!-- Container on the left-->

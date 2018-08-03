@@ -51,5 +51,80 @@ function getShipDetails(shipGid){
 	}
 }
 function displayShipDetails(data){
-	console.log(data);
+	// Display crew data
+	var crew=data.shipdata[0].crew_agg;
+	displayCrewDetails(crew);
+	//Set the title
+	var title=data.shipdata[0].shipname;
+	document.getElementById("shidDetailsTitle").setAttribute('value',title);
+	//Set other details
+	console.log(data.shipdata[0].shipcomments);
+	var value="";
+	if(data.shipdata[0].or_country!=""){
+		value +="Origin: "+data.shipdata[0].or_place+' ('+data.shipdata[0].or_country+")\n\n";
+	}
+	if(data.shipdata[0].jb_country!=""){
+		value +="Journey begin: "+data.shipdata[0].jb_place+' ('+data.shipdata[0].jb_country+")\n\n";
+	}
+	if(data.shipdata[0].je_country!=""){
+		value +="Journey end: "+data.shipdata[0].je_place+' ('+data.shipdata[0].je_country+")\n\n";
+	}
+	if(data.shipdata[0].shiptakenlocation!=""){
+		value +="Taken location: "+data.shipdata[0].shiptakenlocation+"\n\n";
+	}
+	if(data.shipdata[0].shipage!=""&&data.shipdata[0].shipage!=null){
+		value +="Ship age: "+data.shipdata[0].shipage+"\n\n";
+	}
+	if(data.shipdata[0].shipconstrplace!=""){
+		value +="Construction place: "+data.shipdata[0].shipconstrplace+"\n\n";
+	}
+	if(data.shipdata[0].shiptonnage!=""&&data.shipdata[0].shiptonnage!=null){
+		value +="Weight: "+data.shipdata[0].shiptonnage+" tons \n\n";
+	}
+	if(data.shipdata[0].shipdateedtf!=""){
+		value +="Date of capture: "+data.shipdata[0].shipdateedtf+"\n\n";
+	}
+	if(data.shipdata[0].shipcrewtot!=""&&data.shipdata[0].shipcrewtot!=null){
+		value +="Crew number: "+data.shipdata[0].shipcrewtot+"\n\n";
+	}
+	if(data.shipdata[0].shipcrewnat!=""){
+		value +="Crew nationality: "+data.shipdata[0].shipcrewnat+"\n\n";
+	}
+	if(data.shipdata[0].shipownres!=""){
+		value +="Owner residency: "+data.shipdata[0].shipownres+"\n\n";
+	}
+	if(data.shipdata[0].shipcomments!=""){
+		value +="Comments: "+data.shipdata[0].shipcomments+"\n\n";
+	}
+	document.getElementById("shidDetailsText").setAttribute('value',value);
 }
+function displayCrewDetails(crew){
+	console.log(crew);
+	a=crew;
+	var value="";
+	crew.forEach(c=>{
+		value+=c.crewfirstname+' '+c.crewlastname;
+		value+='; age of '+c.crewage;
+		value+='; maritial status: '+c.crewmarstat;
+		value+='; family status: '+c.crewfamstat;
+		value+='; place of residence: '+c.crewplaceres;
+		value+='; rank: '+c.crewrank;
+		value+='; ocupation title: '+c.occuptitle;
+		value+='\n\n';
+	});
+	document.getElementById("crewDetailsText").setAttribute('value',value);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
