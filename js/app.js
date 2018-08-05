@@ -103,14 +103,33 @@ function displayCrewDetails(crew){
 	a=crew;
 	var value="";
 	crew.forEach(c=>{
-		value+=c.crewfirstname+' '+c.crewlastname;
-		value+='; age of '+c.crewage;
-		value+='; maritial status: '+c.crewmarstat;
-		value+='; family status: '+c.crewfamstat;
-		value+='; place of residence: '+c.crewplaceres;
-		value+='; rank: '+c.crewrank;
-		value+='; ocupation title: '+c.occuptitle;
-		value+='\n\n';
+		if(c.occuptitle!=""){
+			value+=c.occuptitle+':\n';
+		}
+		
+		if(c.crewfirstname!="" && c.crewlastname!=""){
+			value+=c.crewfirstname+' '+c.crewlastname;
+		}
+		if(c.crewrank!=''){
+			value+=' ('+c.crewrank+')';
+		}
+		if(c.crewage!=''&& c.crewage!=null){
+			value+=' with '+c.crewage+" years old";
+		}
+		if(c.crewmarstat!="" && c.crewmarstat!="No data on form"){
+			value+='; '+c.crewmarstat;
+		}
+		if(c.crewfamstat!=""){
+			if(c.crewfamstat=="Family"){
+				value+="; with family";
+			}else{
+				value+='; family status: '+c.crewfamstat;
+			}
+		}
+		if(c.crewplaceres!=''){
+			value+='; resident in '+c.crewplaceres;
+		}
+		value+='.\n\n';
 	});
 	document.getElementById("crewDetailsText").setAttribute('value',value);
 }

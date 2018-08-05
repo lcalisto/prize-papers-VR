@@ -143,7 +143,8 @@ function mapAddDataRoutesLayer(geojson){
 	////Create one interaction
 		var select = new ol.interaction.Select({
 		    condition: ol.events.condition.click, //Click interaction
-		    layers:[layerShipRoutes]
+		    layers:[layerShipRoutes],
+		    hitTolerance:20
 		  });
 		map.addInteraction(select);
 		select.on('select', function(e) {
