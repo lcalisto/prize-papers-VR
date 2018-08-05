@@ -13,9 +13,17 @@ var sourceOsm = new ol.source.OSM();
 var layerOsm = new ol.layer.Tile({
   source: sourceOsm
 });
+var sourceCountries = new ol.source.Vector({
+    url: 'https://openlayers.org/en/v4.6.5/examples/data/geojson/countries.geojson',
+    format: new ol.format.GeoJSON()
+});
+var countries = new ol.layer.Vector({
+    source: sourceCountries
+});
 var map = new ol.Map({
     layers: [
-    	layerOsm
+    	layerOsm,
+    	countries
     ],
     target: 'map',
     controls: ol.control.defaults({
@@ -76,10 +84,18 @@ function updateRouteMap(feature){
 			layer.getSource().addFeature(feature);
 			routeDetailsMap.getView().fit(feature.getGeometry().getExtent());
 			document.getElementById('detailedRouteWarning').setAttribute('visible','false');
+			document.getElementById('detailedShipWarning').setAttribute('visible','false');
+			document.getElementById('detailedShipInfo').setAttribute('visible','true');
+			document.getElementById('detailsSeparator').setAttribute('visible','true');
+			document.getElementById('detailedCrewInfo').setAttribute('visible','true');
 		}else{
 			// If the selected layer is nothing then we just clean the map
 			layer.getSource().clear();
 			document.getElementById('detailedRouteWarning').setAttribute('visible','true');
+			document.getElementById('detailedShipWarning').setAttribute('visible','true');
+			document.getElementById('detailedShipInfo').setAttribute('visible','false');
+			document.getElementById('detailsSeparator').setAttribute('visible','false');
+			document.getElementById('detailedCrewInfo').setAttribute('visible','false');
 			routeDetailsMap.getView().setCenter([0,0]);
 			routeDetailsMap.getView().setZoom(0.7);
 		}
@@ -143,8 +159,8 @@ function mapAddDataRoutesLayer(geojson){
 	////Create one interaction
 		var select = new ol.interaction.Select({
 		    condition: ol.events.condition.click, //Click interaction
-		    layers:[layerShipRoutes],
-		    hitTolerance:20
+		    layers:[layerShipRoutes,countries]
+		    //hitTolerance:20
 		  });
 		map.addInteraction(select);
 		select.on('select', function(e) {
@@ -152,8 +168,13 @@ function mapAddDataRoutesLayer(geojson){
 				console.log(e.selected[0]);
 //				console.log(e.selected[0].getGeometry().getExtent());
 				//Update minimap
-				updateRouteMap(e.selected[0]);
-				getShipDetails(e.selected[0].getId());
+				if(typeof(e.selected[0].getProperties().jb_country)!="undefined"){
+					updateRouteMap(e.selected[0]);
+					getShipDetails(e.selected[0].getId());
+				}else{
+					console.log('Selected feature is not a route.');
+				}
+
 			}
 			else{
 				console.log('nothing selected.');

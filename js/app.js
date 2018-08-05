@@ -99,8 +99,6 @@ function displayShipDetails(data){
 	document.getElementById("shidDetailsText").setAttribute('value',value);
 }
 function displayCrewDetails(crew){
-	console.log(crew);
-	a=crew;
 	var value="";
 	crew.forEach(c=>{
 		if(c.occuptitle!=""){
