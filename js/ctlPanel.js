@@ -2,6 +2,9 @@ document.getElementById('ctlPanel').addEventListener('loaded', function () {
 	// once the ctlPanel is loaded we can get data according to initial selections.
 	console.log('Loading initial data');
 	getAPIUserSelData();
+	//Button to change mode cannot have onclick function on index.html. Needs to be dinamic. Otherwise it acumulates the functions.
+	document.getElementById('ctlGlobeIcon').setAttribute('onclick','createInvertedPanelCheck()');
+	document.getElementById('ctlHideIcon').setAttribute('onclick','hideCtlPanel()');
 });
 
 function onYearBtn(start,end,componentID){

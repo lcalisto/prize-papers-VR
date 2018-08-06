@@ -58,7 +58,6 @@ function displayShipDetails(data){
 	var title=data.shipdata[0].shipname;
 	document.getElementById("shidDetailsTitle").setAttribute('value',title);
 	//Set other details
-	console.log(data.shipdata[0].shipcomments);
 	var value="";
 	if(data.shipdata[0].or_country!=""){
 		value +="Origin: "+data.shipdata[0].or_place+' ('+data.shipdata[0].or_country+")\n\n";
@@ -131,10 +130,92 @@ function displayCrewDetails(crew){
 	});
 	document.getElementById("crewDetailsText").setAttribute('value',value);
 }
+function hideCtlPanel(){
+	document.getElementById("panelYears").setAttribute('visible','false');
+	document.getElementById("panelOR").setAttribute('visible','false');
+	document.getElementById("panelJB").setAttribute('visible','false');
+	document.getElementById("panelJE").setAttribute('visible','false');
+	if(document.getElementById('ctlHideIcon') != null){
+		var parent=document.getElementById("ctlHideIcon").parentEl;
+		parent.removeChild(document.getElementById("ctlHideIcon"));
+		var showIcon=document.createElement("a-gui-icon-button");
+		showIcon.setAttribute('width','0.55');
+		showIcon.setAttribute('height','0.55');
+		showIcon.setAttribute('id','ctlShowIcon');
+		showIcon.setAttribute('onclick','showCtlPanel()');
+		showIcon.setAttribute('icon','eye');
+		showIcon.setAttribute('position','0.57 0 0');
+		parent.appendChild(showIcon);
+	}
+}
+function showCtlPanel(){
+	document.getElementById("panelYears").setAttribute('visible','true');
+	document.getElementById("panelOR").setAttribute('visible','true');
+	document.getElementById("panelJB").setAttribute('visible','true');
+	document.getElementById("panelJE").setAttribute('visible','true');
+	if(document.getElementById('ctlShowIcon') != null){
+		var parent=document.getElementById("ctlShowIcon").parentEl;
+		parent.removeChild(document.getElementById("ctlShowIcon"));
+		var hideIcon=document.createElement("a-gui-icon-button");
+		hideIcon.setAttribute('width','0.55');
+		hideIcon.setAttribute('height','0.55');
+		hideIcon.setAttribute('id','ctlHideIcon');
+		hideIcon.setAttribute('onclick','hideCtlPanel()');
+		hideIcon.setAttribute('icon','eye-disabled');
+		hideIcon.setAttribute('position','0.57 0 0');
+		parent.appendChild(hideIcon);
+	}
+}
+function closeInfoPanel(){
+	if(document.getElementById('infoPanel') != null){
+		var parent=document.getElementById("infoPanel").parentEl;
+		parent.removeChild(document.getElementById("infoPanel"));
+	}
+}
 
-
-
-
+function createInfoPanel(){
+	var infoImg=document.createElement("a-image");
+	infoImg.setAttribute('src','#ion-information-circled');
+	infoImg.setAttribute('height','0.15');
+	infoImg.setAttribute('width','0.15');
+	infoImg.setAttribute('position','0 0.3 0.01');
+	var infoText=document.createElement("a-text");
+	infoText.setAttribute('wrap-count','50');
+	infoText.setAttribute('align','center');
+	infoText.setAttribute('baseline','top');
+	infoText.setAttribute('value','This VR enviroment was build under for the prize papers data. \n \
+			It aims to be a geodata exploration tool with VR capabilities. \n\n \
+			For more information follow us in GitHub or contact the autor: \n\n\
+			Luis Calisto (l.f.calisto@utwente.nl) \n\
+			https://github.com/lcalisto/prize-papers-VR-explorer \n\
+			');
+	//infoText.setAttribute('color','white');
+	infoText.setAttribute('color','grey');
+	infoText.setAttribute('width','1.4');
+	infoText.setAttribute('position','0 0.17 0.01');
+	var okButton=document.createElement("a-gui-button");
+	okButton.setAttribute('width','0.2');
+	okButton.setAttribute('height','0.07');
+	//If user clicks ok then we load the inverted globe
+	okButton.setAttribute('onclick','closeInfoPanel()');
+	okButton.setAttribute('value','ok');
+	okButton.setAttribute('position','0 -0.3 0');
+	okButton.setAttribute('font-family','Arial');
+	okButton.setAttribute('font-size','15px');
+	okButton.setAttribute('margin','0 0 0.02 0.00');
+	var aPlane=document.createElement("a-plane");
+	aPlane.setAttribute('position','0 1.7 -0.5');
+	//aPlane.setAttribute('color','#464d47');
+	aPlane.setAttribute('color','##cecece');
+	aPlane.setAttribute('height','0.8');
+	aPlane.setAttribute('width','1.5');
+	aPlane.setAttribute('id','infoPanel');
+	aPlane.setAttribute('visible','true');
+	aPlane.appendChild(infoImg);
+	aPlane.appendChild(infoText);
+	aPlane.appendChild(okButton);
+	document.getElementById("mainScene").appendChild(aPlane);
+}
 
 
 
