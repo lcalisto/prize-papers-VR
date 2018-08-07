@@ -28,7 +28,6 @@ je_countriesList=countries.data.je_countries;
 
 
 function getShipDetails(shipGid){
-	console.log(shipGid);
 	if (shipGid.toString().length>0){
 		//Construct the URL for GET request
 		var url=APIendpoint+'ship?gid='+shipGid.toString();
@@ -51,6 +50,31 @@ function getShipDetails(shipGid){
 	}
 }
 function displayShipDetails(data){
+	var totalRoute=(new ol.format.GeoJSON()).readFeature(data.shipdata[0].jb_takenloc_je_line,{
+		dataProjection:'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+    });
+	var jb_point=(new ol.format.GeoJSON()).readFeature(data.shipdata[0].jb_point,{
+		dataProjection:'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+    });
+	var takenloc_point=(new ol.format.GeoJSON()).readFeature(data.shipdata[0].takenloc_point,{
+		dataProjection:'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+    });
+	var je_point=(new ol.format.GeoJSON()).readFeature(data.shipdata[0].je_point,{
+		dataProjection:'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+    });
+	var jb_takenloc_line=(new ol.format.GeoJSON()).readFeature(data.shipdata[0].jb_takenloc_line,{
+		dataProjection:'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+    });
+	var takenloc_je_line=(new ol.format.GeoJSON()).readFeature(data.shipdata[0].takenloc_je_line,{
+		dataProjection:'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+    });
+	updateRouteMap(totalRoute,jb_point,takenloc_point,je_point,jb_takenloc_line,takenloc_je_line);
 	// Display crew data
 	var crew=data.shipdata[0].crew_agg;
 	displayCrewDetails(crew);
@@ -204,7 +228,7 @@ function createInfoPanel(){
 	okButton.setAttribute('font-size','15px');
 	okButton.setAttribute('margin','0 0 0.02 0.00');
 	var aPlane=document.createElement("a-plane");
-	aPlane.setAttribute('position','0 1.7 -0.5');
+	aPlane.setAttribute('position','0 1.7 -1');
 	//aPlane.setAttribute('color','#464d47');
 	aPlane.setAttribute('color','##cecece');
 	aPlane.setAttribute('height','0.8');

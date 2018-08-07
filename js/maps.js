@@ -61,24 +61,121 @@ var sourceShipRoute = new ol.source.Vector({
 	format: new ol.format.GeoJSON(),
     id:'shipRouteSource'
 });
+
 var layerShipRoute = new ol.layer.Vector({
     source: sourceShipRoute,
     id:'shipRouteLayer',
-    style: function(a){
-    	return new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: 'blue',
-                width: 2
-              })
-        })
-    } 
+    style: styleRouteMap
 });
 routeDetailsMap.addLayer(layerShipRoute);
 
 /*
+ * A function that generates the styles for the Ship route map (top right)
+ */ 
+function styleRouteMap(feature){
+	if(feature.getGeometry().getType()=='Point'){
+		if(typeof(feature.getProperties().featureCode)!='undefined' && feature.getProperties().featureCode=='jb_point'){
+			console.log(feature.getProperties().name);
+			return new ol.style.Style({
+		          image: new ol.style.Circle({
+		            radius: 5,
+		            fill: new ol.style.Fill({color: '#434f20'}),
+		            stroke: new ol.style.Stroke({color: '#434f20', width: 1})
+		          }),
+//		          text: new ol.style.Text({
+//		        	  textAlign: 'Center',
+//        	          textBaseline: 'Top',
+//        	          font: '10 15 Arial',
+//        	          text: feature.getProperties().name,
+//        	          fill: new ol.style.Fill({color: 'black'}),
+//        	          stroke: new ol.style.Stroke({color: 'black', width: '1'}),
+//        	          offsetX: 0,
+//        	          offsetY: 0,
+//        	          placement: 'Point',
+//        	          maxAngle: 45,
+//        	          overflow: true,
+//        	          rotation: 0
+//		          }),
+		          text: new ol.style.Text({
+	                    text: feature.getProperties().name,
+	                    offsetY: 11,
+	                    fill: new ol.style.Fill({color: '#434f20'}),
+	                    stroke: new ol.style.Stroke({color: '#ffffff', width: 3}),
+	                    maxAngle:45
+	                })
+		        });
+		}else if(typeof(feature.getProperties().featureCode)!='undefined' && feature.getProperties().featureCode=='je_point'){
+			return new ol.style.Style({
+		          image: new ol.style.Circle({
+		            radius: 5,
+		            fill: new ol.style.Fill({color: '#434f20'}),
+		            stroke: new ol.style.Stroke({color: '#434f20', width: 1})
+		          }),
+		          text: new ol.style.Text({
+	                    text: feature.getProperties().name,
+	                    offsetY: 11,
+	                    fill: new ol.style.Fill({color: '#434f20'}),
+	                    stroke: new ol.style.Stroke({color: '#ffffff', width: 3}),
+	                    maxAngle:45
+	                })
+		        });
+		}else if(typeof(feature.getProperties().featureCode)!='undefined' && feature.getProperties().featureCode=='takenloc_point'){
+			return new ol.style.Style({
+				image: new ol.style.RegularShape({
+		            fill: new ol.style.Fill({color: 'brown'}),
+		            stroke: new ol.style.Stroke({color: 'brown', width: 3}),
+		            points: 4,
+		            radius: 7,
+		            radius2: 0,
+		            angle: Math.PI / 4
+		          }),
+		          text: new ol.style.Text({
+	                    text: feature.getProperties().name,
+	                    offsetY: 11,
+	                    fill: new ol.style.Fill({color: 'brown'}),
+	                    stroke: new ol.style.Stroke({color: '#ffffff', width: 3}),
+	                    maxAngle:45
+	                })
+		        });
+		}else{
+			return new ol.style.Style({
+		          image: new ol.style.Circle({
+		            radius: 5,
+		            fill: new ol.style.Fill({color: '#434f20'}),
+		            stroke: new ol.style.Stroke({color: '#434f20', width: 1})
+		          })
+		        });
+		}
+
+		
+	}else {
+		if(typeof(feature.getProperties().featureCode)!='undefined' && feature.getProperties().featureCode=='takenloc_je_line'){
+			//If the route is between taken location and final port then we dash the line. Probably this part of the jorney was never realized
+	    	return new ol.style.Style({
+	            stroke: new ol.style.Stroke({
+	                color: '#434f20',
+	                width: 2,
+	                lineDash: [.1, 5] //or other combinations
+	              }),
+	              zIndex: 2
+	        })
+		}else{
+	    	return new ol.style.Style({
+	            stroke: new ol.style.Stroke({
+	                color: '#434f20',
+	                width: 2
+	              })
+	        })
+		}
+
+	}
+} 
+
+
+/*
  * Update ROUTES MAP with selected feature
  */
-function updateRouteMap(feature){
+function updateRouteMap(totalRoute,jb_point,takenloc_point,je_point,jb_takenloc_line,takenloc_je_line){
 	var layer;
 	routeDetailsMap.getLayers().forEach(l=>{
 		if(l.get('id')=='shipRouteLayer'){
@@ -86,11 +183,16 @@ function updateRouteMap(feature){
 		}
 	});
 	if(typeof(layer)!='undefined'){
-		if(typeof(feature)!='undefined'){
-			console.log('add feature');
+		if(typeof(totalRoute)!='undefined'){
+			//console.log('add feature');
 			layer.getSource().clear(); // First clear all vectors
-			layer.getSource().addFeature(feature);
-			routeDetailsMap.getView().fit(feature.getGeometry().getExtent());
+			if(takenloc_point.getGeometry()==null){
+				//If we don't have taken position then we just load total route; satrt and end point
+				layer.getSource().addFeatures([jb_point,je_point,totalRoute]);
+			}else{
+				layer.getSource().addFeatures([jb_point,takenloc_point,je_point,jb_takenloc_line,takenloc_je_line]);
+			}
+			routeDetailsMap.getView().fit(totalRoute.getGeometry().getExtent());
 			document.getElementById('detailedRouteWarning').setAttribute('visible','false');
 			document.getElementById('detailedShipWarning').setAttribute('visible','false');
 			document.getElementById('detailedShipInfo').setAttribute('visible','true');
@@ -98,24 +200,34 @@ function updateRouteMap(feature){
 			document.getElementById('detailedCrewInfo').setAttribute('visible','true');
 		}else{
 			// If the selected layer is nothing then we just clean the map
-			layer.getSource().clear();
-			document.getElementById('detailedRouteWarning').setAttribute('visible','true');
-			document.getElementById('detailedShipWarning').setAttribute('visible','true');
-			document.getElementById('detailedShipInfo').setAttribute('visible','false');
-			document.getElementById('detailsSeparator').setAttribute('visible','false');
-			document.getElementById('detailedCrewInfo').setAttribute('visible','false');
-			routeDetailsMap.getView().setCenter([0,0]);
-			routeDetailsMap.getView().setZoom(0.7);
+			cleanRouteMap();
 		}
-
 	}
 }
-
+/*
+ * Clean secondary MAP routes
+ */
+function cleanRouteMap(){
+	var layer;
+	routeDetailsMap.getLayers().forEach(l=>{
+		if(l.get('id')=='shipRouteLayer'){
+			layer=l;
+		}
+	});
+	layer.getSource().clear();
+	document.getElementById('detailedRouteWarning').setAttribute('visible','true');
+	document.getElementById('detailedShipWarning').setAttribute('visible','true');
+	document.getElementById('detailedShipInfo').setAttribute('visible','false');
+	document.getElementById('detailsSeparator').setAttribute('visible','false');
+	document.getElementById('detailedCrewInfo').setAttribute('visible','false');
+	routeDetailsMap.getView().setCenter([0,0]);
+	routeDetailsMap.getView().setZoom(0.7);
+}
 /*
  * Clean MAIN MAP routes
  */
 
-function mapClearRoutesLayer(geojson){
+function mapClearRoutesLayer(){
 	// check if sourceShipRoutes exists
 	var layer;
 	map.getLayers().forEach(l=>{
@@ -144,6 +256,10 @@ function mapAddDataRoutesLayer(geojson){
 	if(typeof(layer)!='undefined'){
 		console.log('clean features')
 		layer.getSource().clear();
+		if(geojson.features==null){
+			//If geojson is empty then on action
+			return null
+		}
 		layer.getSource().addFeatures((new ol.format.GeoJSON()).readFeatures(geojson,{
 			dataProjection:'EPSG:4326',
 	        featureProjection: 'EPSG:3857'
@@ -165,8 +281,8 @@ function mapAddDataRoutesLayer(geojson){
 		    style: function(a){
 		    	return new ol.style.Style({
 		            stroke: new ol.style.Stroke({
-		                color: 'brown',
-		                width: 2
+		                color: '#434f20',
+		                width: 1
 		              })
 		        })
 		    } 
@@ -181,11 +297,11 @@ function mapAddDataRoutesLayer(geojson){
 		map.addInteraction(select);
 		select.on('select', function(e) {
 			if(e.selected.length>0){
-				console.log(e.selected[0]);
+				//console.log(e.selected[0]);
 //				console.log(e.selected[0].getGeometry().getExtent());
 				//Update minimap
 				if(typeof(e.selected[0].getProperties().jb_country)!="undefined"){
-					updateRouteMap(e.selected[0]);
+					//updateRouteMap(e.selected[0]);
 					getShipDetails(e.selected[0].getId());
 				}else{
 					console.log('Selected feature is not a route.');
@@ -194,7 +310,7 @@ function mapAddDataRoutesLayer(geojson){
 			}
 			else{
 				console.log('nothing selected.');
-				updateRouteMap();
+				cleanRouteMap();
 			}
 		  });
 	}

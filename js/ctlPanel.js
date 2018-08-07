@@ -14,7 +14,7 @@ function onYearBtn(start,end,componentID){
 	//var checked=document.getElementById(componentID).components['gui-toggle'].data.checked;
 }
 
-//To turn toogle on and of:
+//To turn toogle on and off:
 //document.getElementById('ctlFilterBtn').emit("check")
 
 function onMapSettingsBtn(){
@@ -36,7 +36,7 @@ function getAPIUserSelData(){
 	// Get a list with all the selected countries including "others"
 	var temp_countries=[];
 	if(or_countriesList.length>0){
-		temp_countries=or_countriesList.slice(0); // Clone the countries list into a new one.
+		temp_countries=or_countriesList.slice(0); // Clone the countries list into a new one
 		selectedCountries.or_countries.forEach(a=>{
 			temp_countries.forEach(b=>{
 				if(a.toLowerCase()==b.toLowerCase()){
@@ -48,13 +48,23 @@ function getAPIUserSelData(){
 						or_countriesApiRequest+=',';
 					}
 					or_countriesApiRequest+=b;
-				}else if(a.toLowerCase()=='others'){
-					if(or_countriesApiRequest.length>0){
-						or_countriesApiRequest+=',';
-					}
-					or_countriesApiRequest+=b;
 				}
 			});
+			if(a.toLowerCase()=='others'){
+				if(or_countriesApiRequest.length>0){
+					or_countriesApiRequest+=',';
+				}
+				['France','USA','Germany','Netherlands','England','Sweden','Portugal'].forEach(d=>{
+					var i = temp_countries.indexOf(d);
+					if(i != -1) {
+						temp_countries.splice(i, 1);
+					}
+				});
+				temp_countries.forEach(c=>{
+					or_countriesApiRequest+=c;
+					or_countriesApiRequest+=',';
+				});
+			}
 		});
 	}
 	if(jb_countriesList.length>0){
@@ -70,13 +80,23 @@ function getAPIUserSelData(){
 						jb_countriesApiRequest+=',';
 					}
 					jb_countriesApiRequest+=b;
-				}else if(a.toLowerCase()=='others'){
-					if(jb_countriesApiRequest.length>0){
-						jb_countriesApiRequest+=',';
-					}
-					jb_countriesApiRequest+=b;
 				}
 			});
+			if(a.toLowerCase()=='others'){
+				if(jb_countriesApiRequest.length>0){
+					jb_countriesApiRequest+=',';
+				}
+				['France','USA','Germany','Netherlands','England','Sweden','Portugal'].forEach(d=>{
+					var i = temp_countries.indexOf(d);
+					if(i != -1) {
+						temp_countries.splice(i, 1);
+					}
+				});
+				temp_countries.forEach(c=>{
+					jb_countriesApiRequest+=c;
+					jb_countriesApiRequest+=',';
+				});
+			}
 		});
 	}
 	if(je_countriesList.length>0){
@@ -92,16 +112,33 @@ function getAPIUserSelData(){
 						je_countriesApiRequest+=',';
 					}
 					je_countriesApiRequest+=b;
-				}else if(a.toLowerCase()=='others'){
-					if(je_countriesApiRequest.length>0){
-						je_countriesApiRequest+=',';
-					}
-					je_countriesApiRequest+=b;
 				}
 			});
+			if(a.toLowerCase()=='others'){
+				if(je_countriesApiRequest.length>0){
+					je_countriesApiRequest+=',';
+				}
+				['France','USA','Germany','Netherlands','England','Sweden','Portugal'].forEach(d=>{
+					var i = temp_countries.indexOf(d);
+					if(i != -1) {
+						temp_countries.splice(i, 1);
+					}
+				});
+				temp_countries.forEach(c=>{
+					je_countriesApiRequest+=c;
+					je_countriesApiRequest+=',';
+				});
+			}
 		});
 	}
 	// perform API request if we have years.
+	if(or_countriesApiRequest.length<1 || jb_countriesApiRequest.length<1 || je_countriesApiRequest.length<1){
+		console.log('Could not perform request. No selected group countries.');
+		//Clean all layers from all maps and exit
+		mapClearRoutesLayer();
+		cleanRouteMap();
+		return null
+	}
 	if(selectedYears.start!=Infinity && selectedYears.end!=-Infinity){
 		//First lets clear all map data!
 		mapClearRoutesLayer();
@@ -166,7 +203,10 @@ function getAPIUserSelData(){
 		});
 		/////////////////////////////////////////////////////
 	}else{
-		console.log('Could not perform request. No selected years.')
+		console.log('Could not perform request. No selected years.');
+		//Clean all layers from all maps
+		mapClearRoutesLayer();
+		cleanRouteMap();
 	}
 	
 	
