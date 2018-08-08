@@ -6,6 +6,12 @@ document.getElementById('ctlPanel').addEventListener('loaded', function () {
 	document.getElementById('ctlGlobeIcon').setAttribute('onclick','createInvertedPanelCheck()');
 	document.getElementById('ctlHideIcon').setAttribute('onclick','hideCtlPanel()');
 });
+document.getElementById('leftMainContainer').addEventListener('loaded', function () {
+	// once the leftMainContainer is loaded we can add the barchart.
+	addBarChart()
+	
+});
+
 
 function onYearBtn(start,end,componentID){
 	console.log(start);
@@ -190,7 +196,6 @@ function getAPIUserSelData(){
 		}).then(response => {
 			return response.json();
 		}).then(data => {
-			console.log(data);
 			mapAddDataRoutesLayer(data);
 			document.getElementById('ctlPanel').setAttribute('visible',true);
 			document.getElementById('loadingCtlPanel').setAttribute('visible',false);

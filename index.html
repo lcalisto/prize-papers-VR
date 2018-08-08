@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="assets/ol/ol.css" type="text/css">
     <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
     <script src="assets/ol/polyfill.min.js"></script>
-    <script src="https://openlayers.org/en/v4.6.5/build/ol-debug.js"></script>
+    <script src="assets/ol/ol-debug.js"></script>
     <!-- A-Frame -->
     <script src="assets/aframe/aframe.min.js"></script>
     <!-- aframe openlayers component -->
@@ -16,8 +16,10 @@
         <!-- aframe GUI component -->
     <link rel="stylesheet" href="assets/aframe-gui/icons.css" type="text/css">
     <script src="assets/aframe-gui/aframe-gui.js"></script> 
-
-    
+    <!-- A-framedc (charts) -->
+	<script src="assets/a-framedc/aframedc.js"></script>
+	<!-- Jquery is required for aframe dc (charts) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <!-- main JS file -->
    <script src="js/app.js"></script> 
   </head>
@@ -37,8 +39,9 @@
 			<video id="ctlLoadingVideo" autoplay loop="true" src="assets/loading.mp4"></video>
 			<a-asset-item id="iconfont" src="assets/fonts/ionicons.ttf"></a-asset-item>
 			<a-asset-item id="fontfamily" src="https://fonts.googleapis.com/css?family=Fira+Sans"></a-asset-item>			  
-
+			<a-asset-item id="barsdata" src="assets/shiptakenlocTop10.json"></a-asset-item>
 		</a-assets>
+
 		<!-- Container on the left-->
         <a-entity id="leftMainContainer" position="0 1.7 0" scale="-1 1 1" visible="true">
        		<!-- left top-->
@@ -49,19 +52,21 @@
 	          </a-entity>
 	         <!-- left bottom-->
 	         <a-entity geometry="primitive: cylinder; openEnded: true; thetaStart:99; thetaLength: 40;radius:3; height:1;"
-	          material="side: double; shader: flat; src:#initStat"
+	          material="side: double; shader: flat;"
 	          position="0 -0.5 0"
 	          >          
 	          </a-entity>
+
           </a-entity>
-          <!-- Main map controlers -->
-          <a-entity id="mainMapControlers" position="1.680 2.10 -2.410" rotation="0 -35.670 0" scale="0.3 0.3 0.3" visible="true">
-          		<a-gui-flex-container flex-direction="column" position="0 1.1 0">
+
+		 <!--  Main map controls -->
+	     <a-entity id="mainMapControlers" position="1.680 2.10 -2.410" rotation="0 -35.670 0" scale="0.3 0.3 0.3" visible="true">
 					<a-gui-icon-button
 						width="0.5" height="0.5"
 						onclick='mapZoomIn(map);'
 						icon="plus-round"
 						margin="0 0 0.05 0"
+						position="0 1.5 0"
 					>
 					</a-gui-icon-button>
 					<a-gui-icon-button
@@ -69,16 +74,16 @@
 						onclick='mapZoomOut(map);'
 						icon="minus-round"
 						margin="0 0 0 0"
+						position="0 0.9 0"
 					>
 					</a-gui-icon-button>
-			  </a-gui-flex-container>
-	          <a-gui-flex-container flex-direction="row"  position="-0.45 0 0">
 					<a-gui-icon-button
 						width="0.5" height="0.5"
 						onclick='mapPanLeft(map);'
 						rotation="0 0 90"
 						icon="android-arrow-up"
 						margin="0 0.4 0 0"
+						position="-0.4 0 0"
 					>
 					</a-gui-icon-button>
 					<a-gui-icon-button
@@ -87,24 +92,24 @@
 						rotation="0 0 -90"
 						icon="android-arrow-up"
 						margin="0 0 0 0"
-					>
-					</a-gui-icon-button>
-			</a-gui-flex-container>
-	        <a-gui-flex-container flex-direction="column" position="0 0 0">
-					<a-gui-icon-button
-						width="0.5" height="0.5"
-						onclick='mapPanUp(map);'
-						icon="android-arrow-up"
+						position="0.4 0 0"
 					>
 					</a-gui-icon-button>
 					<a-gui-icon-button
 						width="0.5" height="0.5"
 						onclick='mapPanDown(map);'
-						icon="android-arrow-down"
+						icon="android-arrow-up"
+						position="0 0.3 0"
 					>
 					</a-gui-icon-button>
-			</a-gui-flex-container>
-		</a-entity>
+					<a-gui-icon-button
+						width="0.5" height="0.5"
+						onclick='mapPanUp(map);'
+						icon="android-arrow-down"
+						position="0 -0.3 0"
+					>
+					</a-gui-icon-button>
+			</a-entity>
 		<!-- End main map controls -->
 		<!-- Main Map -->
 		<a-entity geometry="primitive: cylinder; openEnded: true; thetaStart:140; thetaLength: 80;radius:3; height:2;"
@@ -131,57 +136,57 @@
 		></a-text>
 		<a-entity id="rightMainContainer" position="0 1.7 0"  >
 		      <!-- Top right map controls -->
-	          <a-entity id="topRightMapControlers" position="2.890 0.400 -0.620" rotation="0 -65 0" scale="0.3 0.3 0.3" visible="true">
-	          		<a-gui-flex-container flex-direction="column" position="0 1.1 0">
-						<a-gui-icon-button
-							width="0.5" height="0.5"
-							onclick='mapZoomIn(routeDetailsMap);'
-							icon="plus-round"
-							margin="0 0 0.05 0"
-						>
-						</a-gui-icon-button>
-						<a-gui-icon-button
-							width="0.5" height="0.5"
-							onclick='mapZoomOut(routeDetailsMap);'
-							icon="minus-round"
-							margin="0 0 0 0"
-						>
-						</a-gui-icon-button>
-				  </a-gui-flex-container>
-		          <a-gui-flex-container flex-direction="row"  position="-0.45 0 0">
-						<a-gui-icon-button
-							width="0.5" height="0.5"
-							onclick='mapPanLeft(routeDetailsMap);'
-							rotation="0 0 90"
-							icon="android-arrow-up"
-							margin="0 0.4 0 0"
-						>
-						</a-gui-icon-button>
-						<a-gui-icon-button
-							width="0.5" height="0.5"
-							onclick='mapPanRight(routeDetailsMap);'
-							rotation="0 0 -90"
-							icon="android-arrow-up"
-							margin="0 0 0 0"
-						>
-						</a-gui-icon-button>
-				</a-gui-flex-container>
-		        <a-gui-flex-container flex-direction="column" position="0 0 0">
-						<a-gui-icon-button
-							width="0.5" height="0.5"
-							onclick='mapPanUp(routeDetailsMap);'
-							icon="android-arrow-up"
-						>
-						</a-gui-icon-button>
-						<a-gui-icon-button
-							width="0.5" height="0.5"
-							onclick='mapPanDown(routeDetailsMap);'
-							icon="android-arrow-down"
-						>
-						</a-gui-icon-button>
-				</a-gui-flex-container>
-			</a-entity>
-			<!-- End right top Map controls -->
+	          <a-entity id="topRightMapControlers" position="2.890 0.400 -0.71" rotation="0 -70 0" scale="0.3 0.3 0.3">
+					<a-gui-icon-button
+						width="0.5" height="0.5"
+						onclick='mapZoomIn(routeDetailsMap);'
+						icon="plus-round"
+						margin="0 0 0.05 0"
+						position="0 1.5 0"
+					>
+					</a-gui-icon-button>
+					<a-gui-icon-button
+						width="0.5" height="0.5"
+						onclick='mapZoomOut(routeDetailsMap);'
+						icon="minus-round"
+						margin="0 0 0 0"
+						position="0 0.9 0"
+					>
+					</a-gui-icon-button>
+					<a-gui-icon-button
+						width="0.5" height="0.5"
+						onclick='mapPanLeft(routeDetailsMap);'
+						rotation="0 0 90"
+						icon="android-arrow-up"
+						margin="0 0.4 0 0"
+						position="-0.4 0 0"
+					>
+					</a-gui-icon-button>
+					<a-gui-icon-button
+						width="0.5" height="0.5"
+						onclick='mapPanRight(routeDetailsMap);'
+						rotation="0 0 -90"
+						icon="android-arrow-up"
+						margin="0 0 0 0"
+						position="0.4 0 0"
+					>
+					</a-gui-icon-button>
+					<a-gui-icon-button
+						width="0.5" height="0.5"
+						onclick='mapPanDown(routeDetailsMap);'
+						icon="android-arrow-up"
+						position="0 0.3 0"
+					>
+					</a-gui-icon-button>
+					<a-gui-icon-button
+						width="0.5" height="0.5"
+						onclick='mapPanUp(routeDetailsMap);'
+						icon="android-arrow-down"
+						position="0 -0.3 0"
+					>
+					</a-gui-icon-button>
+				</a-entity>
+				<!-- End right top Map controls -->
 	         <!-- right top Map-->
 			<a-entity geometry="primitive: cylinder; openEnded: true; thetaStart:221; thetaLength: 40;radius:3; height:1;"
 	          material="side: back; shader: flat;"
@@ -318,7 +323,7 @@
 			<a-gui-flex-container 
 				flex-direction="column" 
 				id="panelYears"
-				justify-content="flexStart" align-items="flexStart" item-padding="0.1" component-padding="0.1" opacity="0.7" width="0.5" height="0.75"
+				justify-content="flexStart" align-items="flexStart" item-padding="0.1" component-padding="0.1" opacity="0.7" width="0.5" height="0.65"
 				position="-0.8 0 0"
 			>
 				<a-gui-label 
@@ -712,11 +717,12 @@
      	<!-- In case we have VR controls -->
 		<a-entity laser-controls="hand: right"></a-entity>
 
- 		<a-camera id="camera" position="0 1.6 1"  look-controls wasd-controls-enabled="true">
+ 		<a-camera id="camera" position="0 1.6 1"  look-controls wasd-controls>
 		  <a-text id="infoText" color="grey" value="" position="0 -0.2 -1" scale="0.4 0.4 0.4"></a-text>
 		  <!-- Carefull with long fuse times or buttons will act strange in desktop browser -->
-		  <a-cursor fuse interval="0"></a-cursor>
+		  <a-cursor  rayOrigin="mouse" fuse interval="0"></a-cursor>
 		</a-camera> 
+		
 		
 
  		<!-- Camera + cursor. -->

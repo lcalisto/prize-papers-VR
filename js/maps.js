@@ -13,17 +13,17 @@ var sourceOsm = new ol.source.OSM();
 var layerOsm = new ol.layer.Tile({
   source: sourceOsm
 });
-var sourceCountries = new ol.source.Vector({
-    url: 'https://openlayers.org/en/v4.6.5/examples/data/geojson/countries.geojson',
-    format: new ol.format.GeoJSON()
-});
-var countries = new ol.layer.Vector({
-    source: sourceCountries
-});
+//var sourceCountries = new ol.source.Vector({
+//    url: 'https://openlayers.org/en/v4.6.5/examples/data/geojson/countries.geojson',
+//    format: new ol.format.GeoJSON()
+//});
+//var countries = new ol.layer.Vector({
+//    source: sourceCountries
+//});
 var map = new ol.Map({
     layers: [
-    	layerOsm,
-    	countries
+    	layerOsm
+    	//countries
     ],
     target: 'map',
     controls: ol.control.defaults({
@@ -33,7 +33,7 @@ var map = new ol.Map({
     }),
     view: new ol.View({
         center: [0, 0],
-        zoom: 0.7
+        zoom: 0.8
     })
 });
 
@@ -75,7 +75,6 @@ routeDetailsMap.addLayer(layerShipRoute);
 function styleRouteMap(feature){
 	if(feature.getGeometry().getType()=='Point'){
 		if(typeof(feature.getProperties().featureCode)!='undefined' && feature.getProperties().featureCode=='jb_point'){
-			console.log(feature.getProperties().name);
 			return new ol.style.Style({
 		          image: new ol.style.Circle({
 		            radius: 5,
@@ -291,7 +290,7 @@ function mapAddDataRoutesLayer(geojson){
 	////Create one interaction
 		var select = new ol.interaction.Select({
 		    condition: ol.events.condition.click, //Click interaction
-		    layers:[layerShipRoutes,countries]
+		    layers:[layerShipRoutes]
 		    //hitTolerance:20
 		  });
 		map.addInteraction(select);
@@ -323,6 +322,8 @@ function toInvertedGlobe(toCamera){
 	if(document.getElementById("infoPanelCheck") != null){
 		document.getElementById("infoPanelCheck").parentEl.removeChild(document.getElementById("infoPanelCheck"));
 	}
+	//Destroy right map controls
+	destroyRightMapControls();
 	//destroy globe icon and create a new one
 	if(document.getElementById('ctlGlobeIcon') != null){
 		var parent=document.getElementById("ctlGlobeIcon").parentEl;
@@ -357,6 +358,8 @@ function toInvertedGlobe(toCamera){
 		document.getElementById('rightMainContainer').setAttribute('position',"0 0 -1");
 		//document.getElementById('camera').appendChild(document.getElementById('loadingCtlPanel'));
 		//document.getElementById('loadingCtlPanel').setAttribute('position',"0 0 -1");
+		//create right map controls
+		createRightMapControls()
 	}
 }
 
@@ -368,6 +371,8 @@ function toPanelBased(){
 	if(document.getElementById("infoPanelCheck") != null){
 		document.getElementById("infoPanelCheck").parentEl.removeChild(document.getElementById("infoPanelCheck"));
 	}
+	//Destroy right map controls
+	destroyRightMapControls();
 	//destroy globe icon and create a new one
 	if(document.getElementById('ctlMapIcon') != null){
 		var parent=document.getElementById("ctlMapIcon").parentEl;
@@ -400,6 +405,8 @@ function toPanelBased(){
 	document.getElementById('rightMainContainer').setAttribute('position',"0 1.7 0");
 	//document.getElementById('camera').appendChild(document.getElementById('loadingCtlPanel'));
 	//document.getElementById('loadingCtlPanel').setAttribute('position',"0 0 -1");
+	//create right map controls
+	createRightMapControls()
 }
 function createInvertedPanelCheck(){
 	console.log('to inverted');

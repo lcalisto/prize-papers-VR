@@ -241,6 +241,94 @@ function createInfoPanel(){
 	document.getElementById("mainScene").appendChild(aPlane);
 }
 
+function createRightMapControls(camera){
+	var zoomInButton=document.createElement("a-gui-icon-button");
+	zoomInButton.setAttribute('width','0.5');
+	zoomInButton.setAttribute('height','0.5');
+	zoomInButton.setAttribute('onclick','mapZoomIn(routeDetailsMap);');
+	zoomInButton.setAttribute('icon','plus-round');
+	zoomInButton.setAttribute('position','0 1.5 0');
+	zoomInButton.setAttribute('margin','0 0 0.05 0');
+	var zoomOutButton=document.createElement("a-gui-icon-button");
+	zoomOutButton.setAttribute('width','0.5');
+	zoomOutButton.setAttribute('height','0.5');
+	zoomOutButton.setAttribute('onclick','mapZoomOut(routeDetailsMap);');
+	zoomOutButton.setAttribute('icon','minus-round');
+	zoomOutButton.setAttribute('position','0 0.9 0');
+	zoomOutButton.setAttribute('margin','0 0 0 0');
+	var panLeftButton=document.createElement("a-gui-icon-button");
+	panLeftButton.setAttribute('width','0.5');
+	panLeftButton.setAttribute('height','0.5');
+	panLeftButton.setAttribute('onclick','mapPanLeft(routeDetailsMap);');
+	panLeftButton.setAttribute('rotation','0 0 90');
+	panLeftButton.setAttribute('icon','android-arrow-up');
+	panLeftButton.setAttribute('margin','0 0.4 0 0');
+	panLeftButton.setAttribute('position','-0.4 0 0');
+	var panRightButton=document.createElement("a-gui-icon-button");
+	panRightButton.setAttribute('width','0.5');
+	panRightButton.setAttribute('height','0.5');
+	panRightButton.setAttribute('onclick','mapPanRight(routeDetailsMap);');
+	panRightButton.setAttribute('rotation','0 0 -90');
+	panRightButton.setAttribute('icon','android-arrow-up');
+	panRightButton.setAttribute('margin','0 0 0 0');
+	panRightButton.setAttribute('position','0.4 0 0');
+	var panUpButton=document.createElement("a-gui-icon-button");
+	panUpButton.setAttribute('width','0.5');
+	panUpButton.setAttribute('height','0.5');
+	panUpButton.setAttribute('onclick','mapPanDown(routeDetailsMap);');
+	panUpButton.setAttribute('icon','android-arrow-up');
+	panUpButton.setAttribute('position','0 0.3 0');
+	var panDownButton=document.createElement("a-gui-icon-button");
+	panDownButton.setAttribute('width','0.5');
+	panDownButton.setAttribute('height','0.5');
+	panDownButton.setAttribute('onclick','mapPanUp(routeDetailsMap);');
+	panDownButton.setAttribute('icon','android-arrow-down');
+	panDownButton.setAttribute('position','0 -0.3 0');
+	var entity=document.createElement("a-entity");
+	entity.setAttribute('id','topRightMapControlers');
+	entity.setAttribute('position','2.890 0.400 -0.71');
+	entity.setAttribute('rotation','0 -70 0');
+	entity.setAttribute('scale','0.3 0.3 0.3');
+	entity.appendChild(zoomInButton);
+	entity.appendChild(zoomOutButton);
+	entity.appendChild(panLeftButton);
+	entity.appendChild(panRightButton);
+	entity.appendChild(panUpButton);
+	entity.appendChild(panDownButton);
+	document.getElementById("rightMainContainer").appendChild(entity);
+}
+function destroyRightMapControls(){
+	if(document.getElementById('topRightMapControlers') != null){
+		var parent=document.getElementById("topRightMapControlers").parentEl;
+		parent.removeChild(document.getElementById("topRightMapControlers"));
+	}
+}
+function addBarChart(){
+	var entity=document.createElement("a-entity");
+	entity.setAttribute('id','barChart');
+	entity.setAttribute('barchart','\
+							xsteps:20;\
+				    		ysteps:5;\
+							width:20;\
+							height:;\
+							depth:0.5;\
+							color:#00FF00;\
+							gridson:true;\
+							title:Top 10 places with more taken ships.;\
+							src:#barsdata');
+	entity.setAttribute('position','2.870 -0.95 -0.560');
+	entity.setAttribute('rotation','0 118 0');
+	entity.setAttribute('scale','0.09 0.08 -0.09');// Because scale is negative in leftMainContainer then we need to compensate the charts in negative Z
+	document.getElementById("leftMainContainer").appendChild(entity);
+}
+
+function destroyBarChart(){
+	if(document.getElementById('barChart') != null){
+		var parent=document.getElementById("barChart").parentEl;
+		parent.removeChild(document.getElementById("barChart"));
+	}
+}
+
 
 
 
