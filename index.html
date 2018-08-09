@@ -20,6 +20,7 @@
 	<script src="assets/a-framedc/aframedc.js"></script>
 	<!-- Jquery is required for aframe dc (charts) -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	
     <!-- main JS file -->
    <script src="js/app.js"></script> 
   </head>
@@ -129,7 +130,7 @@
          <!-- Container on the right-->
        	<a-text id="detailedRouteWarning"
 				value="Select a route to show details."
-				color="#585858"
+				color="#282828"
 				width= "1.5"
 				rotation="0 -59 0"
 				position="2.3 2.2 -1.6"
@@ -188,12 +189,12 @@
 				</a-entity>
 				<!-- End right top Map controls -->
 	         <!-- right top Map-->
-			<a-entity geometry="primitive: cylinder; openEnded: true; thetaStart:221; thetaLength: 40;radius:3; height:1;"
+			<a-entity geometry="primitive: cylinder; openEnded: true; thetaStart:221; thetaLength: 40;radius:3; height:0.83;"
 	          material="side: back; shader: flat;"
-	          position="0 0.5 0"
+	          position="0 0.580 0"
 	          id="detailedRouteMap"
 	          width="2" 
-			  height="1"
+			  height="0.88"
 			  scale="-1 1 1"
 	          ol="  map: routeDetailsMap;
 		         pixToVRRatio:150;"
@@ -208,12 +209,12 @@
 					id="rightbottomplane"
 					width="2.1" 
 					color="#FFFFFF"
-					height="1"
+					height="1.3"
 					opacity="100"
 			>
 			    <a-text id="detailedShipWarning"
 				value="Select a route to show ship details."
-				color="#585858"
+				color="#282828"
 				width= "1.5"
 				rotation="0 0 0"
 				position="-0.35 0 0"
@@ -224,25 +225,25 @@
 					position="-0.5 0 0" 
 					width="1" 
 					visible="false"
-					height="1"
+					height="1.2"
 				><a-text id="shidDetailsTitle"
-							wrap-count="35"
+							wrap-count="30"
 							align="center"
 							value="Ship title"	
-							color="#585858"
+							color="#282828"
 							width= "1"
-							position="0 0.45 0.01"
+							position="0 0.55 0.01"
 					></a-text>
 					<a-text id="shidDetailsText"
 							align="left"
-							wrap-count="50"
+							wrap-count="35"
 							anchor="center"
 							baseline="top"
 							value="
 							"
-							color="#585858"
+							color="#282828"
 							width= "0.95"
-							position="0 0.35 0"
+							position="0 0.45 0"
 					></a-text>
 				</a-entity>
 				<a-plane
@@ -251,7 +252,7 @@
 					width="0.01" 
 					color="grey"
 					visible="false"
-					height="0.9"
+					height="1.2"
 					opacity="100"
 				>
 				</a-plane>
@@ -260,40 +261,40 @@
 					id="detailedCrewInfo"
 					position="0.55 0 0"
 					visible="false"
-					width="1" height="1"
-				><a-text id="crewDetailsTitle"
-							wrap-count="35"
+					width="1" height="1.3"
+				><a-text id="	"
+							wrap-count="30"
 							align="center"
 							value="Interrogated crew members"	
-							color="#585858"
+							color="#282828"
 							width= "1"
-							position="0 0.45 0.01"
+							position="0 0.55 0.01"
 					></a-text>
 					<a-text id="crewDetailsText"
 							align="left"
-							wrap-count="50"
+							wrap-count="35"
 							anchor="center"
 							baseline="top"
 							value="
 							"
-							color="#585858"
+							color="#282828"
 							width= "0.95"
-							position="0 0.35 0"
+							position="0 0.45 0"
 					></a-text>
 				</a-entity>
 			</a-plane >
          </a-entity>
 
 		<!-- create a loading panel -->
-		<a-entity id="loadingCtlPanel" visible="true" position="0.05 1 -1.3" rotation="-30 0 0" >
+		<a-entity id="loadingCtlPanel" visible="true" position="0.05 1 -1.82" rotation="-30 0 0" >
 		    <a-plane color="#232123" width="2" height="0.75"> 
 		    </a-plane>
 <!-- 			<a-video src="#ctlLoadingVideo" width="0.5" height="0.5" position="0 0 0.01"></a-video> -->
 		</a-entity>
 		<!-- create the control panel -->
-		<a-entity id="ctlPanel" visible="true" position="0.05 1 -1.3" rotation="-30 0 0">
+		<a-entity id="ctlPanel" visible="true" position="0.05 1 -1.8" rotation="-30 0 0">
 			<!-- Info and inverted globe Icon -->
-			<a-entity  rotation="30 0 0" position="0 0.520 0.040" scale="0.3 0.3 0.3" if="ctlPanelTopIcons">
+			<a-entity  rotation="30 0 0" position="0 0.520 0.040" scale="0.3 0.3 0.3" id="ctlPanelTopIcons">
 					<a-gui-icon-button
 						width="0.55" height="0.55" id="ctlGlobeIcon"
 						onclick=''
@@ -411,7 +412,6 @@
 						width="0.5" height="0.09"
 						value="Ship origin country"
 						font-family="Arial"
-						checked=true
 						font-size="15px"
 						margin="0.00 0.00 0.02 0.0"
 					>
@@ -432,7 +432,7 @@
 						onclick='getAPIUserSelData'
 						value="USA"
 						id="ctlOrCountryUSA"
-						checked=true
+						checked=false
 						font-size="15px"
 						font-family="Arial"
 						margin="0 0 0.02 0.00"
@@ -443,7 +443,7 @@
 						onclick='getAPIUserSelData'
 						value="Germany"
 						id="ctlOrCountryGermany"
-						checked=true
+						checked=false
 						font-size="15px"
 						font-family="Arial"
 						margin="0 0 0.02 0.00"
@@ -454,7 +454,7 @@
 						onclick='getAPIUserSelData'
 						value="Netherlands"
 						id="ctlOrCountryNetherlands"
-						checked=true
+						checked=false
 						font-size="15px"
 						font-family="Arial"
 						margin="0 0 0.02 0.00"
@@ -465,7 +465,7 @@
 						onclick='getAPIUserSelData'
 						value="England"
 						id="ctlOrCountryEngland"
-						checked=true
+						checked=false
 						font-size="15px"
 						font-family="Arial"
 						margin="0 0 0.02 0.00"
@@ -476,7 +476,7 @@
 						onclick='getAPIUserSelData'
 						value="Sweden"
 						id="ctlOrCountrySweden"
-						checked=true
+						checked=false
 						font-size="15px"
 						font-family="Arial"
 						margin="0 0 0.02 0.00"
@@ -487,7 +487,7 @@
 						onclick='getAPIUserSelData'
 						value="Portugal"
 						id="ctlOrCountryPortugal"
-						checked=true
+						checked=false
 						font-size="15px"
 						font-family="Arial"
 						margin="0 0 0.02 0.00"
@@ -601,7 +601,7 @@
 						onclick='getAPIUserSelData'
 						value="Others"
 						id="ctlJbCountryOthers"
-						checked=false
+						checked=true
 						font-size="15px"
 						font-family="Arial"
 						margin="0 0 0.02 0.00"
@@ -704,7 +704,7 @@
 						onclick='getAPIUserSelData'
 						value="Others"
 						id="ctlJeCountryOthers"
-						checked=false
+						checked=true
 						font-size="15px"
 						font-family="Arial"
 						margin="0 0 0.02 0.00"
@@ -715,14 +715,14 @@
 		</a-entity>
 		
      	<!-- In case we have VR controls -->
+		
 		<a-entity laser-controls="hand: right"></a-entity>
-
  		<a-camera id="camera" position="0 1.6 1"  look-controls wasd-controls>
-		  <a-text id="infoText" color="grey" value="" position="0 -0.2 -1" scale="0.4 0.4 0.4"></a-text>
-		  <!-- Carefull with long fuse times or buttons will act strange in desktop browser -->
-		  <a-cursor  rayOrigin="mouse" fuse interval="0"></a-cursor>
+<!-- 		  Carefull with long fuse times or buttons will act strange in desktop browser -->
+		  <a-cursor  fuse interval="0"></a-cursor>
 		</a-camera> 
 		
+
 		
 
  		<!-- Camera + cursor. -->

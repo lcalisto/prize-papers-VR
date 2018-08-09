@@ -341,7 +341,7 @@ function toInvertedGlobe(toCamera){
 	//hide the check panel
 	var mainMap=document.getElementById('mainMap');
 	//mainMap.setAttribute('visible',"false");
-	mainMap.setAttribute('geometry',"primitive:sphere;thetaStart:0;thetaLength:180;radius:40;");
+	mainMap.setAttribute('geometry',"primitive:sphere;thetaStart:0;thetaLength:180;radius:90;");
 	mainMap.setAttribute('height',"4");
 	mainMap.setAttribute('width',"4");
 	mainMap.setAttribute('ol',"pixToVRRatio:200");
@@ -352,15 +352,28 @@ function toInvertedGlobe(toCamera){
 	if(toCamera){
 		document.getElementById('camera').appendChild(document.getElementById('leftMainContainer'));
 		document.getElementById('leftMainContainer').setAttribute('position',"0 0 -1");
+		document.getElementById("leftMainContainer").setAttribute('visible','false');
 		document.getElementById('camera').appendChild(document.getElementById('detailedRouteWarning'));
 		document.getElementById('detailedRouteWarning').setAttribute('position',"2.3 0.57 -2.6");
 		document.getElementById('camera').appendChild(document.getElementById('rightMainContainer'));
-		document.getElementById('rightMainContainer').setAttribute('position',"0 0 -1");
+		document.getElementById('rightMainContainer').setAttribute('position',"0 1 -1.5");
+		document.getElementById('rightMainContainer').setAttribute('rotation',"-13 40 -15");
+		// minimap side by side
+		document.getElementById('detailedRouteMap').setAttribute('position',"0 -0.4 0");
+		document.getElementById('detailedRouteMap').setAttribute('rotation',"-4 40 0");
+		document.getElementById('detailedRouteWarning').setAttribute('position',"-1.31 -0.23 -3.720");
+		document.getElementById('detailedRouteWarning').setAttribute('rotation',"0 15.360 -8.450");	
 		//document.getElementById('camera').appendChild(document.getElementById('loadingCtlPanel'));
 		//document.getElementById('loadingCtlPanel').setAttribute('position',"0 0 -1");
 		//create right map controls
-		createRightMapControls()
+		createRightMapControls();
+		document.getElementById('topRightMapControlers').setAttribute('position',"1.743 -0.586 -2.385");
+		document.getElementById('topRightMapControlers').setAttribute('rotation',"0 -40 0");
 	}
+	//Hide the main map controllers and close the ctl panel
+	document.getElementById('mainMapControlers').setAttribute('visible',"false");
+	document.getElementById('mainMapControlers').setAttribute('position',"0 999 0");
+	//hideCtlPanel();
 }
 
 /*
@@ -406,7 +419,9 @@ function toPanelBased(){
 	//document.getElementById('camera').appendChild(document.getElementById('loadingCtlPanel'));
 	//document.getElementById('loadingCtlPanel').setAttribute('position',"0 0 -1");
 	//create right map controls
-	createRightMapControls()
+	createRightMapControls();
+	document.getElementById('mainMapControlers').setAttribute('visible',"true");
+	document.getElementById('mainMapControlers').setAttribute('position',"1.680 2.10 -2.410");
 }
 function createInvertedPanelCheck(){
 	console.log('to inverted');
@@ -420,7 +435,7 @@ function createInvertedPanelCheck(){
 	warnText.setAttribute('align','center');
 	warnText.setAttribute('baseline','top');
 	warnText.setAttribute('value','Change to inverted globe mode?');
-	warnText.setAttribute('color','#D3D3D3');
+	warnText.setAttribute('color','#DCDCDC');
 	warnText.setAttribute('width','0.7');
 	warnText.setAttribute('position','0 0.03 0.01');
 	var okButton=document.createElement("a-gui-button");
@@ -444,7 +459,7 @@ function createInvertedPanelCheck(){
 	cancelButton.setAttribute('font-size','15px');
 	cancelButton.setAttribute('margin','0 0 0.02 0.00');
 	var aPlane=document.createElement("a-plane");
-	aPlane.setAttribute('position','0 1.7 -0.5');
+	aPlane.setAttribute('position','0 1.620 -1.8');
 	aPlane.setAttribute('color','#464d47');
 	aPlane.setAttribute('height','0.4');
 	aPlane.setAttribute('width','0.7');
@@ -468,7 +483,7 @@ function createPlanePanelCheck(){
 	warnText.setAttribute('align','center');
 	warnText.setAttribute('baseline','top');
 	warnText.setAttribute('value','Change to panels mode?');
-	warnText.setAttribute('color','#D3D3D3');
+	warnText.setAttribute('color','#DCDCDC');
 	warnText.setAttribute('width','0.7');
 	warnText.setAttribute('position','0 0.03 0.01');
 	var okButton=document.createElement("a-gui-button");
@@ -492,7 +507,7 @@ function createPlanePanelCheck(){
 	cancelButton.setAttribute('font-size','15px');
 	cancelButton.setAttribute('margin','0 0 0.02 0.00');
 	var aPlane=document.createElement("a-plane");
-	aPlane.setAttribute('position','0 1.7 -0.5');
+	aPlane.setAttribute('position','0 1.620 -1.8');
 	aPlane.setAttribute('color','#464d47');
 	aPlane.setAttribute('height','0.4');
 	aPlane.setAttribute('width','0.7');

@@ -7,7 +7,7 @@ function mapZoomIn(map,factor){
 		console.error('map should be specified.');
 	}
 	if(typeof(factor)=='undefined'){
-		var factor=0.2;
+		var factor=0.5;
 	}
 	var view=map.getView();
 	view.setZoom(view.getZoom()+factor);
@@ -17,28 +17,40 @@ function mapZoomOut(map,factor){
 		console.error('map should be specified.');
 	}
 	if(typeof(factor)=='undefined'){
-		var factor=0.2;
+		var factor=0.5;
 	}
 	var view=map.getView();
 	view.setZoom(view.getZoom()-factor);
 }
-function mapPanUp(map,factor){
+function mapPanDown(map,factor){
 	if(typeof(map)=='undefined'){
 		console.error('map should be specified.');
 	}
 	if(typeof(factor)=='undefined'){
-		var factor=100000;//100 km
+		if(map.getView().getZoom()<5){
+			var factor=500000;//500 km
+		}else if(map.getView().getZoom()>=5 ||map.getView().getZoom()<7){
+			var factor=250000;//250 km
+		}else if(map.getView().getZoom()>=7){
+			var factor=100000;//100 km
+		}
 	}
 	var view=map.getView();
 	var centerCoord=view.getCenter();	
 	view.setCenter([centerCoord[0], centerCoord[1]+factor])
 }
-function mapPanDown(map,factor){
+function mapPanUp(map,factor){
 	if(typeof(map)=='undefined'){
 		console.err('map should be specified.');
 	}
 	if(typeof(factor)=='undefined'){
-		var factor=100000;//100 km
+		if(map.getView().getZoom()<5){
+			var factor=500000;//500 km
+		}else if(map.getView().getZoom()>=5 ||map.getView().getZoom()<7){
+			var factor=250000;//250 km
+		}else if(map.getView().getZoom()>=7){
+			var factor=100000;//100 km
+		}
 	}
 	var view=map.getView();
 	var centerCoord=view.getCenter();	
@@ -49,7 +61,13 @@ function mapPanRight(map,factor){
 		console.error('map should be specified.');
 	}
 	if(typeof(factor)=='undefined'){
-		var factor=100000;//100 km
+		if(map.getView().getZoom()<5){
+			var factor=500000;//500 km
+		}else if(map.getView().getZoom()>=5 ||map.getView().getZoom()<7){
+			var factor=250000;//250 km
+		}else if(map.getView().getZoom()>=7){
+			var factor=100000;//100 km
+		}
 	}
 	var view=map.getView();
 	var centerCoord=view.getCenter();	
@@ -60,7 +78,13 @@ function mapPanLeft(map,factor){
 		console.error('map should be specified.');
 	}
 	if(typeof(factor)=='undefined'){
-		var factor=100000;//100 km
+		if(map.getView().getZoom()<5){
+			var factor=500000;//500 km
+		}else if(map.getView().getZoom()>=5 ||map.getView().getZoom()<7){
+			var factor=250000;//250 km
+		}else if(map.getView().getZoom()>=7){
+			var factor=100000;//100 km
+		}
 	}
 	var view=map.getView();
 	var centerCoord=view.getCenter();	

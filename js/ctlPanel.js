@@ -5,6 +5,7 @@ document.getElementById('ctlPanel').addEventListener('loaded', function () {
 	//Button to change mode cannot have onclick function on index.html. Needs to be dinamic. Otherwise it acumulates the functions.
 	document.getElementById('ctlGlobeIcon').setAttribute('onclick','createInvertedPanelCheck()');
 	document.getElementById('ctlHideIcon').setAttribute('onclick','hideCtlPanel()');
+	createInfoPanel();
 });
 document.getElementById('leftMainContainer').addEventListener('loaded', function () {
 	// once the leftMainContainer is loaded we can add the barchart.

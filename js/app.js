@@ -155,10 +155,20 @@ function displayCrewDetails(crew){
 	document.getElementById("crewDetailsText").setAttribute('value',value);
 }
 function hideCtlPanel(){
+	//Althought we hide the panel we also need to send it below ground in order to raycaster not touch it 
 	document.getElementById("panelYears").setAttribute('visible','false');
+	document.getElementById("panelYears").setAttribute('position','-0.8 -4 1');
 	document.getElementById("panelOR").setAttribute('visible','false');
+	document.getElementById("panelOR").setAttribute('position','-0.28 -4 0');
 	document.getElementById("panelJB").setAttribute('visible','false');
+	document.getElementById("panelJB").setAttribute('position','0.24 -4 0');
 	document.getElementById("panelJE").setAttribute('visible','false');
+	document.getElementById("panelJE").setAttribute('position','0.76 -4 0');
+	document.getElementById("loadingCtlPanel").setAttribute('position','0.05 -4 -1.3');
+	//Send the small icons down and rotate them a little.
+	document.getElementById("ctlPanelTopIcons").setAttribute('position','0 -0.150 0.040');
+	document.getElementById("ctlPanelTopIcons").setAttribute('rotation','7 0 0');
+	//Create the hide/show icon
 	if(document.getElementById('ctlHideIcon') != null){
 		var parent=document.getElementById("ctlHideIcon").parentEl;
 		parent.removeChild(document.getElementById("ctlHideIcon"));
@@ -174,9 +184,18 @@ function hideCtlPanel(){
 }
 function showCtlPanel(){
 	document.getElementById("panelYears").setAttribute('visible','true');
+	document.getElementById("panelYears").setAttribute('position','-0.8 0 0');
 	document.getElementById("panelOR").setAttribute('visible','true');
+	document.getElementById("panelOR").setAttribute('position','-0.28 0 0');
 	document.getElementById("panelJB").setAttribute('visible','true');
+	document.getElementById("panelJB").setAttribute('position','0.24 0 0');
 	document.getElementById("panelJE").setAttribute('visible','true');
+	document.getElementById("panelJE").setAttribute('position','0.76 0 0');
+	document.getElementById("loadingCtlPanel").setAttribute('position','0.05 1 -2.60');
+	//Send the small icons to the original place.
+	document.getElementById("ctlPanelTopIcons").setAttribute('position','0 0.520 0.040');
+	document.getElementById("ctlPanelTopIcons").setAttribute('rotation','30 0 0');
+	//Create the hide/show icon
 	if(document.getElementById('ctlShowIcon') != null){
 		var parent=document.getElementById("ctlShowIcon").parentEl;
 		parent.removeChild(document.getElementById("ctlShowIcon"));
@@ -207,14 +226,13 @@ function createInfoPanel(){
 	infoText.setAttribute('wrap-count','50');
 	infoText.setAttribute('align','center');
 	infoText.setAttribute('baseline','top');
-	infoText.setAttribute('value','This VR enviroment was build under for the prize papers data. \n \
-			It aims to be a geodata exploration tool with VR capabilities. \n\n \
+	infoText.setAttribute('value','We have made this geodata exploration tool using WebVR to study the Prize Paper dataset. \n\n \
 			For more information follow us in GitHub or contact the autor: \n\n\
 			Luis Calisto (l.f.calisto@utwente.nl) \n\
 			https://github.com/lcalisto/prize-papers-VR-explorer \n\
 			');
 	//infoText.setAttribute('color','white');
-	infoText.setAttribute('color','grey');
+	infoText.setAttribute('color','#282828');
 	infoText.setAttribute('width','1.4');
 	infoText.setAttribute('position','0 0.17 0.01');
 	var okButton=document.createElement("a-gui-button");
@@ -228,9 +246,9 @@ function createInfoPanel(){
 	okButton.setAttribute('font-size','15px');
 	okButton.setAttribute('margin','0 0 0.02 0.00');
 	var aPlane=document.createElement("a-plane");
-	aPlane.setAttribute('position','0 1.7 -1');
+	aPlane.setAttribute('position','0 1.7 -1.800');
 	//aPlane.setAttribute('color','#464d47');
-	aPlane.setAttribute('color','##cecece');
+	aPlane.setAttribute('color','#cecece');
 	aPlane.setAttribute('height','0.8');
 	aPlane.setAttribute('width','1.5');
 	aPlane.setAttribute('id','infoPanel');
@@ -312,9 +330,9 @@ function addBarChart(){
 							width:20;\
 							height:;\
 							depth:0.5;\
-							color:#00FF00;\
-							gridson:true;\
-							title:Top 10 places with more taken ships.;\
+							color:#597c59;\
+							gridson:false;\
+							title:Top places with more taken ships.;\
 							src:#barsdata');
 	entity.setAttribute('position','2.870 -0.95 -0.560');
 	entity.setAttribute('rotation','0 118 0');
