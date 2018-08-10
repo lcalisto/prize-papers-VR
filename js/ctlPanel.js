@@ -9,10 +9,27 @@ document.getElementById('ctlPanel').addEventListener('loaded', function () {
 });
 document.getElementById('leftMainContainer').addEventListener('loaded', function () {
 	// once the leftMainContainer is loaded we can add the barchart.
-	addBarChart()
-	
+	addBarChart();
 });
-
+document.getElementById('mainScene').addEventListener('enter-vr', function () {
+	console.log('enter VR')
+	//fix for chrome. Selection. Remove and add maps again. 
+	//Somehow in chrome we need to do this.
+//	setTimeout(a=>{	
+//		addMainMap();
+//		addDetailedRouteMap();
+//	}, 50);
+//	setTimeout(a=>{	
+//		mainMap.setAttribute('height',"2");
+//		mainMap.setAttribute('width',"4");
+//		mainMap.setAttribute('ol',"pixToVRRatio:200");
+//		map.getView().setZoom(2);
+//		detailedRouteMap.setAttribute('height',"0.88");
+//		detailedRouteMap.setAttribute('width',"2");
+//		detailedRouteMap.setAttribute('ol',"pixToVRRatio:200");
+//		//routeDetailsMap.getView().setZoom(1.8);
+//	}, 50);
+});
 
 function onYearBtn(start,end,componentID){
 	console.log(start);

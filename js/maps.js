@@ -347,33 +347,34 @@ function toInvertedGlobe(toCamera){
 	mainMap.setAttribute('ol',"pixToVRRatio:200");
 	mainMap.setAttribute('rotation',"0 -120 0");
 	map.getView().setZoom(2);
+	//map.getView().setCenter([0,0]);
 	document.getElementById('imageground').setAttribute('visible',"false");
 	//if true we attach all planes into camera position.
-	if(toCamera){
-		document.getElementById('camera').appendChild(document.getElementById('leftMainContainer'));
-		document.getElementById('leftMainContainer').setAttribute('position',"0 0 -1");
-		document.getElementById("leftMainContainer").setAttribute('visible','false');
-		document.getElementById('camera').appendChild(document.getElementById('detailedRouteWarning'));
-		document.getElementById('detailedRouteWarning').setAttribute('position',"2.3 0.57 -2.6");
-		document.getElementById('camera').appendChild(document.getElementById('rightMainContainer'));
-		document.getElementById('rightMainContainer').setAttribute('position',"0 1 -1.5");
+//	document.getElementById('camera').appendChild(document.getElementById('leftMainContainer'));
+//	document.getElementById('leftMainContainer').setAttribute('position',"0 0 -1");
+	document.getElementById("leftMainContainer").setAttribute('visible','false');
+	document.getElementById('camera').appendChild(document.getElementById('detailedRouteWarning'));
+	document.getElementById('camera').appendChild(document.getElementById('rightMainContainer'));
+
+	//document.getElementById('camera').appendChild(document.getElementById('loadingCtlPanel'));
+	//document.getElementById('loadingCtlPanel').setAttribute('position',"0 0 -1");
+	//create right map controls
+	createRightMapControls();
+	document.getElementById('topRightMapControlers').setAttribute('position',"1.743 -0.586 -2.385");
+	document.getElementById('topRightMapControlers').setAttribute('rotation',"0 -40 0");
+	//Hide the main map controllers and close the ctl panel
+	document.getElementById('mainMapControlers').setAttribute('visible',"false");
+	document.getElementById('mainMapControlers').setAttribute('position',"0 999 0");
+	//Somehow Firefox takes needs some time to process the next lines. Therefore I added as a timeout of 50 miliseconds. 
+	//This way it works but this solution is very very wrong! 
+	setTimeout(a=>{	
+		document.getElementById('rightMainContainer').setAttribute('position',"0 1 -0.7");
 		document.getElementById('rightMainContainer').setAttribute('rotation',"-13 40 -15");
-		// minimap side by side
 		document.getElementById('detailedRouteMap').setAttribute('position',"0 -0.4 0");
 		document.getElementById('detailedRouteMap').setAttribute('rotation',"-4 40 0");
 		document.getElementById('detailedRouteWarning').setAttribute('position',"-1.31 -0.23 -3.720");
 		document.getElementById('detailedRouteWarning').setAttribute('rotation',"0 15.360 -8.450");	
-		//document.getElementById('camera').appendChild(document.getElementById('loadingCtlPanel'));
-		//document.getElementById('loadingCtlPanel').setAttribute('position',"0 0 -1");
-		//create right map controls
-		createRightMapControls();
-		document.getElementById('topRightMapControlers').setAttribute('position',"1.743 -0.586 -2.385");
-		document.getElementById('topRightMapControlers').setAttribute('rotation',"0 -40 0");
-	}
-	//Hide the main map controllers and close the ctl panel
-	document.getElementById('mainMapControlers').setAttribute('visible',"false");
-	document.getElementById('mainMapControlers').setAttribute('position',"0 999 0");
-	//hideCtlPanel();
+	}, 50);
 }
 
 /*
@@ -518,4 +519,35 @@ function createPlanePanelCheck(){
 	aPlane.appendChild(okButton);
 	aPlane.appendChild(cancelButton);
 	document.getElementById("mainScene").appendChild(aPlane);
+}
+function addMainMap(){
+	if(document.getElementById("mainMap") != null){
+		document.getElementById("mainMap").parentEl.removeChild(document.getElementById("mainMap"));
+	}
+	var myMainMap=document.createElement("a-entity");
+	myMainMap.setAttribute('geometry','primitive: cylinder; openEnded: true; thetaStart:140; thetaLength: 80;radius:3; height:2;');
+	myMainMap.setAttribute('height','2');
+	myMainMap.setAttribute('width','4');
+	myMainMap.setAttribute('id','mainMap');
+	myMainMap.setAttribute('material','shader: flat; side: back;');
+	myMainMap.setAttribute('scale','-1 1 1');
+	myMainMap.setAttribute('color','#c4c4c4');
+	myMainMap.setAttribute('position','0 1.7 0');
+	myMainMap.setAttribute('ol','map: map; aframeEvent: click; OlEvent: click; pixToVRRatio:150;');
+	document.getElementById('mainScene').appendChild(myMainMap);
+}
+function addDetailedRouteMap(){
+	if(document.getElementById("detailedRouteMap") != null){
+		document.getElementById("detailedRouteMap").parentEl.removeChild(document.getElementById("detailedRouteMap"));
+	}
+	var myRouteMap=document.createElement("a-entity");
+	myRouteMap.setAttribute('geometry','primitive: cylinder; openEnded: true; thetaStart:221; thetaLength: 40;radius:3; height:0.83;');
+	myRouteMap.setAttribute('height','0.88');
+	myRouteMap.setAttribute('width','2');
+	myRouteMap.setAttribute('id','detailedRouteMap');
+	myRouteMap.setAttribute('material','side: back; shader: flat;');
+	myRouteMap.setAttribute('scale','-1 1 1');
+	myRouteMap.setAttribute('position','0 0.580 0');
+	myRouteMap.setAttribute('ol','map: routeDetailsMap; pixToVRRatio:150;');
+	document.getElementById('rightMainContainer').appendChild(myRouteMap);
 }
