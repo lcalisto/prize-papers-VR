@@ -2,4 +2,4 @@
 
 WebVR data exploration tool for the Prize Papers data.
 
-Online version here: https://maps.calisto.pt/prize-papers/
+Online version here: https://vr.calisto.pt/prizepapers
