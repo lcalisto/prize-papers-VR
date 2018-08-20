@@ -13,17 +13,18 @@ var sourceOsm = new ol.source.OSM();
 var layerOsm = new ol.layer.Tile({
   source: sourceOsm
 });
-//var sourceCountries = new ol.source.Vector({
-//    url: 'https://openlayers.org/en/v4.6.5/examples/data/geojson/countries.geojson',
-//    format: new ol.format.GeoJSON()
-//});
-//var countries = new ol.layer.Vector({
-//    source: sourceCountries
-//});
+// var sourceCountries = new ol.source.Vector({
+// url:
+// 'https://openlayers.org/en/v4.6.5/examples/data/geojson/countries.geojson',
+// format: new ol.format.GeoJSON()
+// });
+// var countries = new ol.layer.Vector({
+// source: sourceCountries
+// });
 var map = new ol.Map({
     layers: [
     	layerOsm
-    	//countries
+    	// countries
     ],
     target: 'map',
     controls: ol.control.defaults({
@@ -81,20 +82,20 @@ function styleRouteMap(feature){
 		            fill: new ol.style.Fill({color: '#434f20'}),
 		            stroke: new ol.style.Stroke({color: '#434f20', width: 1})
 		          }),
-//		          text: new ol.style.Text({
-//		        	  textAlign: 'Center',
-//        	          textBaseline: 'Top',
-//        	          font: '10 15 Arial',
-//        	          text: feature.getProperties().name,
-//        	          fill: new ol.style.Fill({color: 'black'}),
-//        	          stroke: new ol.style.Stroke({color: 'black', width: '1'}),
-//        	          offsetX: 0,
-//        	          offsetY: 0,
-//        	          placement: 'Point',
-//        	          maxAngle: 45,
-//        	          overflow: true,
-//        	          rotation: 0
-//		          }),
+// text: new ol.style.Text({
+// textAlign: 'Center',
+// textBaseline: 'Top',
+// font: '10 15 Arial',
+// text: feature.getProperties().name,
+// fill: new ol.style.Fill({color: 'black'}),
+// stroke: new ol.style.Stroke({color: 'black', width: '1'}),
+// offsetX: 0,
+// offsetY: 0,
+// placement: 'Point',
+// maxAngle: 45,
+// overflow: true,
+// rotation: 0
+// }),
 		          text: new ol.style.Text({
 	                    text: feature.getProperties().name,
 	                    offsetY: 11,
@@ -149,12 +150,14 @@ function styleRouteMap(feature){
 		
 	}else {
 		if(typeof(feature.getProperties().featureCode)!='undefined' && feature.getProperties().featureCode=='takenloc_je_line'){
-			//If the route is between taken location and final port then we dash the line. Probably this part of the jorney was never realized
+			// If the route is between taken location and final port then we
+			// dash the line. Probably this part of the jorney was never
+			// realized
 	    	return new ol.style.Style({
 	            stroke: new ol.style.Stroke({
 	                color: '#434f20',
 	                width: 2,
-	                lineDash: [.1, 5] //or other combinations
+	                lineDash: [.1, 5] // or other combinations
 	              }),
 	              zIndex: 2
 	        })
@@ -183,10 +186,11 @@ function updateRouteMap(totalRoute,jb_point,takenloc_point,je_point,jb_takenloc_
 	});
 	if(typeof(layer)!='undefined'){
 		if(typeof(totalRoute)!='undefined'){
-			//console.log('add feature');
+			// console.log('add feature');
 			layer.getSource().clear(); // First clear all vectors
 			if(takenloc_point.getGeometry()==null){
-				//If we don't have taken position then we just load total route; satrt and end point
+				// If we don't have taken position then we just load total
+				// route; satrt and end point
 				layer.getSource().addFeatures([jb_point,je_point,totalRoute]);
 			}else{
 				layer.getSource().addFeatures([jb_point,takenloc_point,je_point,jb_takenloc_line,takenloc_je_line]);
@@ -256,7 +260,7 @@ function mapAddDataRoutesLayer(geojson){
 		console.log('clean features')
 		layer.getSource().clear();
 		if(geojson.features==null){
-			//If geojson is empty then on action
+			// If geojson is empty then on action
 			return null
 		}
 		layer.getSource().addFeatures((new ol.format.GeoJSON()).readFeatures(geojson,{
@@ -287,20 +291,20 @@ function mapAddDataRoutesLayer(geojson){
 		    } 
 		});
 		map.addLayer(layerShipRoutes);
-	////Create one interaction
+	// //Create one interaction
 		var select = new ol.interaction.Select({
-		    condition: ol.events.condition.click, //Click interaction
-		    layers:[layerShipRoutes]
-		    //hitTolerance:20
+		    condition: ol.events.condition.click, // Click interaction
+		    layers:[layerShipRoutes],
+		    hitTolerance:1
 		  });
 		map.addInteraction(select);
 		select.on('select', function(e) {
 			if(e.selected.length>0){
-				//console.log(e.selected[0]);
-//				console.log(e.selected[0].getGeometry().getExtent());
-				//Update minimap
+				// console.log(e.selected[0]);
+// console.log(e.selected[0].getGeometry().getExtent());
+				// Update minimap
 				if(typeof(e.selected[0].getProperties().jb_country)!="undefined"){
-					//updateRouteMap(e.selected[0]);
+					// updateRouteMap(e.selected[0]);
 					getShipDetails(e.selected[0].getId());
 				}else{
 					console.log('Selected feature is not a route.');
@@ -318,13 +322,13 @@ function mapAddDataRoutesLayer(geojson){
  * Transform main map into inverted globe
  */
 function toInvertedGlobe(toCamera){
-	//destroy the info panel
+	// destroy the info panel
 	if(document.getElementById("infoPanelCheck") != null){
 		document.getElementById("infoPanelCheck").parentEl.removeChild(document.getElementById("infoPanelCheck"));
 	}
-	//Destroy right map controls
+	// Destroy right map controls
 	destroyRightMapControls();
-	//destroy globe icon and create a new one
+	// destroy globe icon and create a new one
 	if(document.getElementById('ctlGlobeIcon') != null){
 		var parent=document.getElementById("ctlGlobeIcon").parentEl;
 		document.getElementById("ctlGlobeIcon").parentEl.removeChild(document.getElementById("ctlGlobeIcon"));
@@ -338,35 +342,39 @@ function toInvertedGlobe(toCamera){
 		parent.appendChild(mapIcon);
 	}
 	console.log('to inverted globe');
-	//hide the check panel
+	// hide the check panel
 	var mainMap=document.getElementById('mainMap');
-	//mainMap.setAttribute('visible',"false");
+	// mainMap.setAttribute('visible',"false");
 	mainMap.setAttribute('geometry',"primitive:sphere;thetaStart:0;thetaLength:180;radius:90;");
 	mainMap.setAttribute('height',"4");
 	mainMap.setAttribute('width',"4");
 	mainMap.setAttribute('ol',"pixToVRRatio:200");
 	mainMap.setAttribute('rotation',"0 -120 0");
 	map.getView().setZoom(2);
-	//map.getView().setCenter([0,0]);
+	// map.getView().setCenter([0,0]);
 	document.getElementById('imageground').setAttribute('visible',"false");
-	//if true we attach all planes into camera position.
-//	document.getElementById('camera').appendChild(document.getElementById('leftMainContainer'));
-//	document.getElementById('leftMainContainer').setAttribute('position',"0 0 -1");
+	// if true we attach all planes into camera position.
+// document.getElementById('camera').appendChild(document.getElementById('leftMainContainer'));
+// document.getElementById('leftMainContainer').setAttribute('position',"0 0
+// -1");
 	document.getElementById("leftMainContainer").setAttribute('visible','false');
 	document.getElementById('camera').appendChild(document.getElementById('detailedRouteWarning'));
 	document.getElementById('camera').appendChild(document.getElementById('rightMainContainer'));
 
-	//document.getElementById('camera').appendChild(document.getElementById('loadingCtlPanel'));
-	//document.getElementById('loadingCtlPanel').setAttribute('position',"0 0 -1");
-	//create right map controls
+	// document.getElementById('camera').appendChild(document.getElementById('loadingCtlPanel'));
+	// document.getElementById('loadingCtlPanel').setAttribute('position',"0 0
+	// -1");
+	// create right map controls
 	createRightMapControls();
 	document.getElementById('topRightMapControlers').setAttribute('position',"1.743 -0.586 -2.385");
 	document.getElementById('topRightMapControlers').setAttribute('rotation',"0 -40 0");
-	//Hide the main map controllers and close the ctl panel
+	// Hide the main map controllers and close the ctl panel
 	document.getElementById('mainMapControlers').setAttribute('visible',"false");
 	document.getElementById('mainMapControlers').setAttribute('position',"0 999 0");
-	//Somehow Firefox takes needs some time to process the next lines. Therefore I added as a timeout of 50 miliseconds. 
-	//This way it works but this solution is very very wrong! 
+	addDetailedRouteMap();
+	// Somehow Firefox takes needs some time to process the next lines.
+	// Therefore I added as a timeout of 50 miliseconds.
+	// This way it works but this solution is very very wrong!
 	setTimeout(a=>{	
 		document.getElementById('rightMainContainer').setAttribute('position',"0 1 -0.7");
 		document.getElementById('rightMainContainer').setAttribute('rotation',"-13 40 -15");
@@ -381,13 +389,13 @@ function toInvertedGlobe(toCamera){
  * Transform main map into inverted globe
  */
 function toPanelBased(){
-	//destroy the info panel
+	// destroy the info panel
 	if(document.getElementById("infoPanelCheck") != null){
 		document.getElementById("infoPanelCheck").parentEl.removeChild(document.getElementById("infoPanelCheck"));
 	}
-	//Destroy right map controls
+	// Destroy right map controls
 	destroyRightMapControls();
-	//destroy globe icon and create a new one
+	// destroy globe icon and create a new one
 	if(document.getElementById('ctlMapIcon') != null){
 		var parent=document.getElementById("ctlMapIcon").parentEl;
 		document.getElementById("ctlMapIcon").parentEl.removeChild(document.getElementById("ctlMapIcon"));
@@ -401,28 +409,35 @@ function toPanelBased(){
 		parent.appendChild(mapIcon);
 	}
 	console.log('back to planes');
-	var mainMap=document.getElementById('mainMap');
-	//mainMap.setAttribute('visible',"false");
-	mainMap.setAttribute('geometry',"primitive: cylinder; openEnded: true; thetaStart:140; thetaLength: 80;radius:3; height:2;");
-	mainMap.setAttribute('height',"2");
-	mainMap.setAttribute('width',"4.188790205");
-	mainMap.setAttribute('ol',"pixToVRRatio:150");
-	mainMap.setAttribute('rotation',"0 0 0");
-	map.getView().setZoom(0.7);
+	// var mainMap=document.getElementById('mainMap');
+	// mainMap.setAttribute('visible',"false");
+// mainMap.setAttribute('geometry',"primitive: cylinder; openEnded: true;
+// thetaStart:140; thetaLength: 80;radius:3; height:2;");
+// mainMap.setAttribute('height',"2");
+// mainMap.setAttribute('width',"4.188790205");
+// mainMap.setAttribute('ol',"pixToVRRatio:150");
+// mainMap.setAttribute('rotation',"0 0 0");
+ 	map.getView().setZoom(0.7);
 	document.getElementById('imageground').setAttribute('visible',"true");
-	//Reposition the elements in their initial position
+	// Reposition the elements in their initial position
 	document.getElementById('mainScene').appendChild(document.getElementById('leftMainContainer'));
 	document.getElementById('leftMainContainer').setAttribute('position',"0 1.7 0");
 	document.getElementById('mainScene').appendChild(document.getElementById('detailedRouteWarning'));
 	document.getElementById('detailedRouteWarning').setAttribute('position',"2.3 2.2 -1.6");
 	document.getElementById('mainScene').appendChild(document.getElementById('rightMainContainer'));
 	document.getElementById('rightMainContainer').setAttribute('position',"0 1.7 0");
-	//document.getElementById('camera').appendChild(document.getElementById('loadingCtlPanel'));
-	//document.getElementById('loadingCtlPanel').setAttribute('position',"0 0 -1");
-	//create right map controls
+	// document.getElementById('camera').appendChild(document.getElementById('loadingCtlPanel'));
+	// document.getElementById('loadingCtlPanel').setAttribute('position',"0 0
+	// -1");
+	// create right map controls
 	createRightMapControls();
 	document.getElementById('mainMapControlers').setAttribute('visible',"true");
 	document.getElementById('mainMapControlers').setAttribute('position',"1.680 2.10 -2.410");
+	
+	setTimeout(a=>{	
+		addMainMap();
+		addDetailedRouteMap();
+	}, 500);
 }
 function createInvertedPanelCheck(){
 	console.log('to inverted');
@@ -442,7 +457,7 @@ function createInvertedPanelCheck(){
 	var okButton=document.createElement("a-gui-button");
 	okButton.setAttribute('width','0.2');
 	okButton.setAttribute('height','0.07');
-	//If user clicks ok then we load the inverted globe
+	// If user clicks ok then we load the inverted globe
 	okButton.setAttribute('onclick','toInvertedGlobe(true)');
 	okButton.setAttribute('value','ok');
 	okButton.setAttribute('position','0.15 -0.1 0');
@@ -452,7 +467,7 @@ function createInvertedPanelCheck(){
 	var cancelButton=document.createElement("a-gui-button");
 	cancelButton.setAttribute('width','0.2');
 	cancelButton.setAttribute('height','0.07');
-	//If user clicks cancel we destroy this panel
+	// If user clicks cancel we destroy this panel
 	cancelButton.setAttribute('onclick','document.getElementById("infoPanelCheck").parentEl.removeChild(document.getElementById("infoPanelCheck"));');
 	cancelButton.setAttribute('value','cancel');
 	cancelButton.setAttribute('position','-0.15 -0.1 0');
@@ -490,7 +505,7 @@ function createPlanePanelCheck(){
 	var okButton=document.createElement("a-gui-button");
 	okButton.setAttribute('width','0.2');
 	okButton.setAttribute('height','0.07');
-	//If user clicks ok then we load the inverted globe
+	// If user clicks ok then we load the inverted globe
 	okButton.setAttribute('onclick','toPanelBased()');
 	okButton.setAttribute('value','ok');
 	okButton.setAttribute('position','0.15 -0.1 0');
@@ -500,7 +515,7 @@ function createPlanePanelCheck(){
 	var cancelButton=document.createElement("a-gui-button");
 	cancelButton.setAttribute('width','0.2');
 	cancelButton.setAttribute('height','0.07');
-	//If user clicks cancel we destroy this panel
+	// If user clicks cancel we destroy this panel
 	cancelButton.setAttribute('onclick','document.getElementById("infoPanelCheck").parentEl.removeChild(document.getElementById("infoPanelCheck"));');
 	cancelButton.setAttribute('value','cancel');
 	cancelButton.setAttribute('position','-0.15 -0.1 0');
@@ -535,6 +550,7 @@ function addMainMap(){
 	myMainMap.setAttribute('position','0 1.7 0');
 	myMainMap.setAttribute('ol','map: map; aframeEvent: click; OlEvent: click; pixToVRRatio:150;');
 	document.getElementById('mainScene').appendChild(myMainMap);
+	
 }
 function addDetailedRouteMap(){
 	if(document.getElementById("detailedRouteMap") != null){
