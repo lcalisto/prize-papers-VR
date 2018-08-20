@@ -15,7 +15,8 @@ This application uses the following tools:
 [__aframe-gui__](https://github.com/rdub80/aframe-gui) Component used to create VR buttons.
 
 [__a-framedc__](https://github.com/fran-aguilar/a-framedc) Component used to display and interact charts and chart (non spatial) data.
-[__jquery](https://jquery.com/) jQuery version 3.1.1
+
+[__jquery__](https://jquery.com) jQuery version 3.1.1
 
 
 ## Install
