@@ -10,7 +10,7 @@ This application uses the following tools:
 
 [__A-Frame__](https://aframe.io/) The main WebVR framework.
 
-[__aframe-openlayers-component__](https://github.com/lcalisto/aframe-openlayers-component) Component used to display and interact with maps and geo data.
+[__aframe-openlayers-component__](https://github.com/lcalisto/aframe-openlayers-component) Component used to display and interact with maps and geo data. It allows the usage of [__OpenLayers__](https://openlayers.org/) inside [__A-Frame__](https://aframe.io/).
 
 [__aframe-gui__](https://github.com/rdub80/aframe-gui) Component used to create VR buttons.
 
