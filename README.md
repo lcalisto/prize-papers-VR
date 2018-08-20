@@ -1,8 +1,8 @@
 # The prize papers WebVR dataset explorer
 
-This tool is a WebVR data exploration tool for the Prize Papers dataset. It was created in order to show the power of WebVR for display and analysis of geo data. This first version was created using plain javascript. Nevertheless a more robust structure can/should be created using a framework such as _Angular; ReactJS; VUE etc._
+This tool is a WebVR data exploration tool for the Prize Papers dataset. It was created in order to show the power of WebVR for display and analysis of geo data. This first version was created using plain javascript, nevertheless a more robust structure can/should be created using a framework such as _Angular; ReactJS; VUE etc._
 
-__Online version here: https://vr.calisto.pt/prizepapers__
+__Online version can be accessed here: https://vr.calisto.pt/prizepapers__
 
 ## Technology
 
@@ -14,7 +14,7 @@ This application uses the following tools:
 
 [__aframe-gui__](https://github.com/rdub80/aframe-gui) Component used to create VR buttons.
 
-[__a-framedc__](https://github.com/fran-aguilar/a-framedc) Component used to display and interact charts and chart (non spatial) data.
+[__a-framedc__](https://github.com/fran-aguilar/a-framedc) Component used to display and interact with charts and chart (non spatial) data.
 
 [__jquery__](https://jquery.com) jQuery version 3.1.1
 
