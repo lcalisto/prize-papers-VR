@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "express": "^4.21.1",
+    "nodemon": "^3.1.7"
+  },
+  "scripts": {
+    "start:dev": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=development nodemon --exec node ./index.js"
+  },
+  "name": "prize-papers-VR",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/lcalisto/prize-papers-VR",
+  "author": "lcalisto <luis.calisto@hotmail.com>",
+  "license": "MIT"
+}
